@@ -45,12 +45,10 @@ class _CWLayoutState extends State<CWLayout> {
     osUserID = status?.userId;
     await ShPref.storeDeviceId(osUserID);
 
-    await OneSignal.shared.promptUserForPushNotificationPermission(
-      fallbackToSettings: true,
-    );
 
     OneSignal.shared.setNotificationOpenedHandler((OSNotificationOpenedResult result) async {
           dynamic response =  result.notification.additionalData;
+          print('emazeem ${result.notification}');
           /*
           if (url == 'post') {
             print ('post url');

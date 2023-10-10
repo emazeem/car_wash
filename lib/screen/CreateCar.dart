@@ -361,6 +361,7 @@ class _CreateCarState extends State<CreateCar> {
                           'subscription_id': selectedSubscription.toString(),
                           'image': await MultipartFile.fromFile(path, filename: basename(path)),
                         });
+                        print(formattedDateTime);
                         createCar(context, formData);
                         setState(() { _isLoading=false; });
                       }
@@ -388,31 +389,38 @@ class _CreateCarState extends State<CreateCar> {
   createCar(context,formData) async {
     String authToken=await ShPref.getAuthToken();
     String uploadUrl = AppUrl.createCarSubscription;
-    Response response = await dio.post(
-      uploadUrl,
-      data: formData,
-      options: Options(
-        headers: {
-          "Accept": "application/json",
-          'Authorization': "Bearer " + authToken
-        },
-        receiveTimeout: 200000,
-        sendTimeout: 200000,
-        followRedirects: false,
-        validateStatus: (status) {
-          return status! < 500;
-        },
-      ),
-    );
-    setState(() { _isLoading=false; });
-    if (response.statusCode == 200){
-      setState(() {
-        imagePath=null;
-      });
-      Navigator.pop(context);
-      Const.toastMessage('Expense booked successfully!!');
-    } else{
+    try{
+      Response response = await dio.post(
+        uploadUrl,
+        data: formData,
+        options: Options(
+          headers: {
+            "Accept": "application/json",
+            'Authorization': "Bearer " + authToken
+          },
+          receiveTimeout: 200000,
+          sendTimeout: 200000,
+          followRedirects: false,
+          validateStatus: (status) {
+            return status! < 500;
+          },
+        ),
+      );
+      setState(() { _isLoading=false; });
+      if (response.statusCode == 200){
+        setState(() {
+          imagePath=null;
+        });
+        Navigator.pop(context);
+        Const.toastMessage('Car booked successfully!!');
+      } else{
+        Const.toastMessage('Something went wrong! Please try again!');
+      }
+    }catch(e){
+      setState(() { _isLoading=false; });
       Const.toastMessage('Something went wrong! Please try again!');
+      print(e);
     }
+
   }
 }

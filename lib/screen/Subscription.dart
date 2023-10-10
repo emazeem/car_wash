@@ -88,9 +88,9 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
                                     child: Row(
                                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                       children: [
-                                        Text('${subscriptions[i]?.title} Package',style: TextStyle(fontWeight: FontWeight.bold),),
+                                        Text('${subscriptions[i]?.title}',style: TextStyle(fontWeight: FontWeight.bold),),
                                         (subscriptions[i]?.is_recurring== SubscriptionType.recurring)
-                                        ? Icon(Icons.refresh)
+                                        ? Icon(Icons.repeat)
                                         : Container(),
                                       ],
                                     ),
@@ -110,6 +110,7 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
                                               _titleController.text='${subscriptions[i]?.title}';
                                               _priceController.text='${subscriptions[i]?.price}';
                                               _idController.text='${subscriptions[i]?.id}';
+                                              updateSubscriptionBool=[false,false,false];
                                               updateSubscriptionBool[i]=true;
                                             });
                                           },
@@ -183,6 +184,10 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
                                                   };
                                                   try{
                                                     Map response=await _indexViewModel.updatePackage(data);
+                                                    await _pullSubscriptions();
+                                                    setState(() {
+                                                      updateSubscriptionBool=[false,false,false];
+                                                    });
                                                   }catch(e){
                                                     print('e');
                                                   }
