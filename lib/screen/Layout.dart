@@ -10,6 +10,7 @@ import 'package:carwash/screen/Invoice.dart';
 import 'package:carwash/screen/Login.dart';
 import 'package:carwash/screen/Payment.dart';
 import 'package:carwash/screen/Profile.dart';
+import 'package:carwash/screen/SingleTask.dart';
 import 'package:carwash/screen/Subscription.dart';
 import 'package:carwash/screen/Transactions.dart';
 import 'package:carwash/viewmodel/IndexViewModel.dart';
@@ -48,15 +49,13 @@ class _CWLayoutState extends State<CWLayout> {
 
     OneSignal.shared.setNotificationOpenedHandler((OSNotificationOpenedResult result) async {
           dynamic response =  result.notification.additionalData;
-          print('emazeem ${result.notification}');
-          /*
-          if (url == 'post') {
-            print ('post url');
-            Navigator.push(context,
-                MaterialPageRoute(builder: (context) => SinglePostScreen(d_id)));
+          String url = response['url'];
+          String id = response['id'].toString();
+          if (url == 'task') {
+            Navigator.push(context, MaterialPageRoute(builder: (context) => SingleTaskScreen(id:id)));
           }
-*/
         });
+
   }
 
 
