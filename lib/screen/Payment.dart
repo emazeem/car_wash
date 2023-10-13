@@ -1,8 +1,10 @@
 import 'package:carwash/constants.dart';
 import 'package:carwash/model/Car.dart';
+import 'package:carwash/payment_configurations.dart';
 import 'package:carwash/viewmodel/IndexViewModel.dart';
 import 'package:flutter/material.dart';
 import 'package:checkout_sdk_flutter/checkout_sdk_flutter.dart';
+import 'package:pay/pay.dart';
 import 'package:provider/provider.dart';
 class PaymentPage extends StatefulWidget {
   final Car? car;
@@ -61,7 +63,18 @@ class _PaymentPageState extends State<PaymentPage> {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
 
     });
+
     super.initState();
+  }
+
+  List<PaymentItem> _paymentItems = [
+    PaymentItem(
+      label: 'Total',
+      amount: '99.99',
+      status: PaymentItemStatus.final_price,
+    )
+  ];
+  void onApplePayResult(paymentResult) {
   }
 
 
@@ -198,6 +211,21 @@ class _PaymentPageState extends State<PaymentPage> {
                   ),
                 ],
               ),
+
+
+              ApplePayButton(
+                paymentConfiguration: PaymentConfiguration.fromJsonString(defaultApplePay),
+                paymentItems: _paymentItems,
+                style: ApplePayButtonStyle.black,
+                type: ApplePayButtonType.buy,
+                margin: const EdgeInsets.only(top: 15.0),
+                onPaymentResult: onApplePayResult,
+                loadingIndicator: const Center(
+                  child: CircularProgressIndicator(),
+                ),
+              ),
+
+
             ],
           ),
         ),

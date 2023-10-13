@@ -200,10 +200,28 @@
       "languageVersion": "2.18"
     },
     {
+      "name": "flutter_localization",
+      "rootUri": "file:///Users/devops/.pub-cache/hosted/pub.dev/flutter_localization-0.1.14",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
+      "name": "flutter_localizations",
+      "rootUri": "file:///Users/devops/Documents/flutter/packages/flutter_localizations",
+      "packageUri": "lib/",
+      "languageVersion": "3.0"
+    },
+    {
       "name": "flutter_plugin_android_lifecycle",
       "rootUri": "file:///Users/devops/.pub-cache/hosted/pub.dev/flutter_plugin_android_lifecycle-2.0.15",
       "packageUri": "lib/",
       "languageVersion": "2.18"
+    },
+    {
+      "name": "flutter_svg",
+      "rootUri": "file:///Users/devops/.pub-cache/hosted/pub.dev/flutter_svg-2.0.7",
+      "packageUri": "lib/",
+      "languageVersion": "2.19"
     },
     {
       "name": "flutter_test",
@@ -494,6 +512,12 @@
       "languageVersion": "2.12"
     },
     {
+      "name": "path_parsing",
+      "rootUri": "file:///Users/devops/.pub-cache/hosted/pub.dev/path_parsing-1.0.1",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
       "name": "path_provider",
       "rootUri": "file:///Users/devops/.pub-cache/hosted/pub.dev/path_provider-2.1.1",
       "packageUri": "lib/",
@@ -530,6 +554,30 @@
       "languageVersion": "2.18"
     },
     {
+      "name": "pay",
+      "rootUri": "file:///Users/devops/.pub-cache/hosted/pub.dev/pay-1.1.2",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
+      "name": "pay_android",
+      "rootUri": "file:///Users/devops/.pub-cache/hosted/pub.dev/pay_android-1.0.11",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
+      "name": "pay_ios",
+      "rootUri": "file:///Users/devops/.pub-cache/hosted/pub.dev/pay_ios-1.0.9",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
+      "name": "pay_platform_interface",
+      "rootUri": "file:///Users/devops/.pub-cache/hosted/pub.dev/pay_platform_interface-1.0.3",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
       "name": "petitparser",
       "rootUri": "file:///Users/devops/.pub-cache/hosted/pub.dev/petitparser-5.4.0",
       "packageUri": "lib/",
@@ -549,9 +597,9 @@
     },
     {
       "name": "plugin_platform_interface",
-      "rootUri": "file:///Users/devops/.pub-cache/hosted/pub.dev/plugin_platform_interface-2.1.5",
+      "rootUri": "file:///Users/devops/.pub-cache/hosted/pub.dev/plugin_platform_interface-2.1.6",
       "packageUri": "lib/",
-      "languageVersion": "2.18"
+      "languageVersion": "2.19"
     },
     {
       "name": "pointycastle",
@@ -573,9 +621,9 @@
     },
     {
       "name": "shared_preferences",
-      "rootUri": "file:///Users/devops/.pub-cache/hosted/pub.dev/shared_preferences-2.2.0",
+      "rootUri": "file:///Users/devops/.pub-cache/hosted/pub.dev/shared_preferences-2.2.2",
       "packageUri": "lib/",
-      "languageVersion": "2.18"
+      "languageVersion": "2.19"
     },
     {
       "name": "shared_preferences_android",
@@ -758,6 +806,24 @@
       "languageVersion": "2.12"
     },
     {
+      "name": "vector_graphics",
+      "rootUri": "file:///Users/devops/.pub-cache/hosted/pub.dev/vector_graphics-1.1.9",
+      "packageUri": "lib/",
+      "languageVersion": "2.17"
+    },
+    {
+      "name": "vector_graphics_codec",
+      "rootUri": "file:///Users/devops/.pub-cache/hosted/pub.dev/vector_graphics_codec-1.1.9",
+      "packageUri": "lib/",
+      "languageVersion": "2.17"
+    },
+    {
+      "name": "vector_graphics_compiler",
+      "rootUri": "file:///Users/devops/.pub-cache/hosted/pub.dev/vector_graphics_compiler-1.1.9",
+      "packageUri": "lib/",
+      "languageVersion": "2.19"
+    },
+    {
       "name": "vector_math",
       "rootUri": "file:///Users/devops/.pub-cache/hosted/pub.dev/vector_math-2.1.4",
       "packageUri": "lib/",
@@ -800,7 +866,7 @@
       "languageVersion": "2.18"
     }
   ],
-  "generated": "2023-10-09T14:49:14.895129Z",
+  "generated": "2023-10-13T09:28:15.298769Z",
   "generator": "pub",
   "generatorVersion": "3.1.3"
 }

@@ -1,6 +1,7 @@
 import 'package:carwash/apis/api_response.dart';
 import 'package:carwash/app_url.dart';
 import 'package:carwash/constants.dart';
+import 'package:carwash/main.dart';
 import 'package:carwash/model/Car.dart';
 import 'package:carwash/model/Customer.dart';
 import 'package:carwash/model/Task.dart';
@@ -12,6 +13,7 @@ import 'package:carwash/screen/ShowLocation.dart';
 import 'package:carwash/screen/TaskDetails.dart';
 import 'package:carwash/viewmodel/IndexViewModel.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_localization/flutter_localization.dart';
 import 'package:provider/provider.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -21,6 +23,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   User? authUser;
+  final FlutterLocalization _localization = FlutterLocalization.instance;
 
   String? authRole;
 
@@ -315,6 +318,84 @@ class _HomeScreenState extends State<HomeScreen> {
                   height: Const.hi(context)/1.2,
                   child:   Const.LoadingIndictorWidtet(),
                 ),
+
+
+
+
+              Visibility(
+                visible: false,
+                child: Container(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Column(
+                    children: [
+                      Row(
+                        children: [
+                          Expanded(
+                            child: ElevatedButton(
+                              child: const Text('English'),
+                              onPressed: () {
+                                _localization.translate('en');
+                              },
+                            ),
+                          ),
+                          const SizedBox(width: 8.0),
+                          Expanded(
+                            child: ElevatedButton(
+                              child: const Text('Arabic'),
+                              onPressed: () {
+                                _localization.translate('ar');
+                              },
+                            ),
+                          ),
+
+
+                        ],
+                      ),
+                      const SizedBox(height: 16.0),
+                      ItemWidget(
+                        title: 'Current Language',
+                        content: _localization.getLanguageName(),
+                      ),
+                      ItemWidget(
+                        title: 'Font Family',
+                        content: _localization.fontFamily,
+                      ),
+                      ItemWidget(
+                        title: 'Locale Identifier',
+                        content: _localization.currentLocale.localeIdentifier,
+                      ),
+                      ItemWidget(
+                        title: 'String Format',
+                        content: Strings.format(
+                          'Hello %a, this is me %a.',
+                          ['Dara', 'Sopheak'],
+                        ),
+                      ),
+                      ItemWidget(
+                        title: 'Context Format String',
+                        content: context.formatString(
+                          AppLocale.thisIs,
+                          [AppLocale.title, 'LATEST'],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+
+
+
+
+
+
+
+
+
+
+
+
+
+
             ],
           ),
         ),
@@ -327,5 +408,28 @@ class _HomeScreenState extends State<HomeScreen> {
 
 
 
+class ItemWidget extends StatelessWidget {
+  const ItemWidget({
+    super.key,
+    required this.title,
+    required this.content,
+  });
 
+  final String? title;
+  final String? content;
 
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 8.0),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Expanded(child: Text(title ?? '')),
+          const Text(' : '),
+          Expanded(child: Text(content ?? '')),
+        ],
+      ),
+    );
+  }
+}
