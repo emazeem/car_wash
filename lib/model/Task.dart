@@ -6,6 +6,8 @@ class Task {
   int? order_id;
   String? date;
   String? time;
+  int? inside_wash;
+  int? outside_wash;
   int? status;
   bool? accessor;
   Order? order;
@@ -16,6 +18,8 @@ class Task {
         this.order_id,
         this.accessor,
         this.order,
+        this.inside_wash,
+        this.outside_wash,
         this.date,
         this.time,
         this.images,
@@ -27,6 +31,8 @@ class Task {
     date = json['date'];
     status = json['status'];
     time = json['time'];
+    inside_wash = json['inside_wash'];
+    outside_wash = json['outside_wash'];
     accessor = json['accessor'];
     order = json['order'] as Order?;
     images = json['images'] as List<String>?;

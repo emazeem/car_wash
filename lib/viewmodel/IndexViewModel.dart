@@ -526,8 +526,17 @@ class IndexViewModel extends ChangeNotifier {
       Const.toastMessage(e.toString());
     }
   }
+  Future deleteAccount(dynamic data) async {
+    String authToken= await ShPref.getAuthToken();
+    try{
+      dynamic response = await _apiServices.getPostAuthApiResponse(AppUrl.deleteAccount,data,authToken);
+     return response;
+    }catch(e){
+      Const.toastMessage(e.toString());
+    }
+  }
+
   Future updatePackage(dynamic data) async {
-    print(data);
     String authToken= await ShPref.getAuthToken();
     try{
       dynamic response = await _apiServices.getPostAuthApiResponse(AppUrl.updateSubscription, data,authToken);
@@ -538,6 +547,16 @@ class IndexViewModel extends ChangeNotifier {
     }
   }
 
+  Future taskApproval(dynamic data) async {
+    String authToken= await ShPref.getAuthToken();
+    try{
+      dynamic response = await _apiServices.getPostAuthApiResponse(AppUrl.taskAction, data,authToken);
+      Const.toastMessage(response['message']);
+      return response;
+    }catch(e){
+      Const.toastMessage(e.toString());
+    }
+  }
 
   Future addCar(dynamic data) async {
     String authToken= await ShPref.getAuthToken();

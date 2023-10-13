@@ -178,6 +178,18 @@ class _CustomerDetailState extends State<CustomerDetail> {
                                                         children: [
                                                           Text('Date : ${cars[i]?.order?.tasks?[x].date}'),
                                                           Text('Time : ${cars[i]?.order?.tasks?[x].time}'),
+                                                          Row(
+                                                              children: [
+                                                                Text('Inside'),
+                                                                Icon(cars[i]?.order?.tasks?[x].inside_wash==1?Icons.check:Icons.close,size: 15,)
+                                                              ]
+                                                          ),
+                                                          Row(
+                                                              children: [
+                                                                Text('Outside'),
+                                                                Icon(cars[i]?.order?.tasks?[x].outside_wash==1?Icons.check:Icons.close,size: 15,)
+                                                              ]
+                                                          )
                                                         ],
                                                       )
                                                     ),

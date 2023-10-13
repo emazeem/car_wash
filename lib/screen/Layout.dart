@@ -4,6 +4,7 @@ import 'package:carwash/screen/Activites.dart';
 import 'package:carwash/screen/Calendar.dart';
 import 'package:carwash/screen/ChangePassword.dart';
 import 'package:carwash/screen/Customers.dart';
+import 'package:carwash/screen/DeleteAccount.dart';
 import 'package:carwash/screen/Expenses.dart';
 import 'package:carwash/screen/Home.dart';
 import 'package:carwash/screen/Invoice.dart';
@@ -220,7 +221,17 @@ class _CWLayoutState extends State<CWLayout> {
                 // Handle order history menu action
               },
             ),
-
+            Container(
+              color: Colors.red,
+              child: ListTile(
+                leading: Icon(Icons.delete_outline,color: Colors.white,),
+                title: Text('Delete Account',style:TextStyle(color: Colors.white),),
+                onTap: () {
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => DeleteAccountPage()));
+                  // Handle order history menu action
+                },
+              ),
+            ),
             ListTile(
               leading: Icon(Icons.logout),
               title: Text('Logout'),

@@ -19,6 +19,7 @@ class AppUrl {
   static var fetchTask= baseUrl + 'fetchTask';
   static var updateUser = baseUrl + 'updateUser';
   static var updateLocation = baseUrl + 'updateLocation';
+  static var deleteAccount = baseUrl + 'deleteAccount';
   static var paymentMarkAsDone = baseUrl + 'paymentMarkAsDone';
   static var taskMarkAsDone = baseUrl + 'taskMarkAsDone';
   static var changePassword = baseUrl + 'changePassword';
@@ -33,4 +34,5 @@ class AppUrl {
   static var fetchTasksFromDates = baseUrl + 'fetchTasksFromDates';
   static var storeNotificationDevice = baseUrl + 'storeNotificationDevice';
   static var updateSubscription = baseUrl + 'updateSubscription';
+  static var taskAction = baseUrl + 'taskAction';
 }

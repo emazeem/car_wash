@@ -321,6 +321,11 @@ class _TaskScreenState extends State<TaskScreen> {
 
                         SizedBox(height: 50,),
                         Text('Car Wash Status :',style: TextStyle(fontWeight: FontWeight.bold,fontSize: 20,color: Colors.blueGrey),),
+
+                        if(task?.inside_wash==1 && task?.outside_wash==1) Text('Inside and Outside Car Wash is required',style: TextStyle(color: Colors.green),),
+                        if(task?.outside_wash==1 && task?.inside_wash==0) Text('Only Outside Car Wash is required',style: TextStyle(color: Colors.green),),
+                        if(task?.outside_wash==0 && task?.inside_wash==1) Text('Only Inside Car Wash is required',style: TextStyle(color: Colors.green),),
+
                         Divider(),
                         task?.status == TaskStatus.pending
                             ? Text('If you have washed the car. You can mark this car as washed.')

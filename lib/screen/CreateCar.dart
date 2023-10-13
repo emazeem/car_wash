@@ -44,6 +44,8 @@ class _CreateCarState extends State<CreateCar> {
   bool _isLoading=false;
   Map<int, dynamic> selectedDateTimeMap = {};
   List<DateTime?> selectedDates=[];
+  List<bool> _insideWash=[false,false,false,false,];
+  List<bool> _outsideWash=[false,false,false,false,];
 
 
   XFile? imagePath;
@@ -264,48 +266,95 @@ class _CreateCarState extends State<CreateCar> {
                     selectedDates.add(selectedDateTime);
                   }
 
-                  return ElevatedButton(
-                    onPressed: () async {
-                      final TimeOfDay? pickedTime = await showTimePicker(
-                        context: context,
-                        initialTime: TimeOfDay.now(),
-                      );
+                  return Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      ElevatedButton(
+                        onPressed: () async {
+                          final TimeOfDay? pickedTime = await showTimePicker(
+                            context: context,
+                            initialTime: TimeOfDay.now(),
+                          );
 
-                      if (pickedTime != null) {
-                        final DateTime? pickedDate = await showDatePicker(
-                          context: context,
-                          initialDate: selectedDateTime,
-                          firstDate: DateTime(2000),
-                          lastDate: DateTime(2101),
-                        );
-
-                        if (pickedDate != null) {
-                          setState(() {
-                            selectedDateTime = DateTime(
-                              pickedDate.year,
-                              pickedDate.month,
-                              pickedDate.day,
-                              pickedTime.hour,
-                              pickedTime.minute,
+                          if (pickedTime != null) {
+                            final DateTime? pickedDate = await showDatePicker(
+                              context: context,
+                              initialDate: selectedDateTime,
+                              firstDate: DateTime(2000),
+                              lastDate: DateTime(2101),
                             );
-                            selectedDates[index] = selectedDateTime;
+
+                            if (pickedDate != null) {
+                              setState(() {
+                                selectedDateTime = DateTime(
+                                  pickedDate.year,
+                                  pickedDate.month,
+                                  pickedDate.day,
+                                  pickedTime.hour,
+                                  pickedTime.minute,
+                                );
+                                selectedDates[index] = selectedDateTime;
 
 
-                            for(int x=0;x<selectedDates.length;x++){
-                              selectedDates[x]=DateTime(
-                                selectedDates[x]!.year,
-                                selectedDates[x]!.month,
-                                selectedDates[x]!.day,
-                                pickedTime.hour,
-                                pickedTime.minute,
-                              );
+                                for(int x=0;x<selectedDates.length;x++){
+                                  selectedDates[x]=DateTime(
+                                    selectedDates[x]!.year,
+                                    selectedDates[x]!.month,
+                                    selectedDates[x]!.day,
+                                    pickedTime.hour,
+                                    pickedTime.minute,
+                                  );
+                                }
+
+                              });
                             }
-
+                          }
+                        },
+                        child: Text(
+                            DateFormat('yyyy-MM-dd').add_jm().format(selectedDates[index]!)
+                        ),
+                      ),
+                      InkWell(
+                        onTap:(){
+                          setState(() {
+                            _insideWash[index]=!_insideWash[index];
                           });
-                        }
-                      }
-                    },
-                    child: Text(DateFormat('yyyy-MM-dd').add_jm().format(selectedDates[index]!)),
+                        },
+                        child: Container(
+                          color:_insideWash[index] ? Colors.greenAccent : Colors.grey.shade300,
+                          padding:EdgeInsets.all(10),
+                          child: Row(
+                            children: [
+                              Text('Inside'),
+                              Icon(
+                                _insideWash[index] ? Icons.check_box :
+                                Icons.check_box_outline_blank,size: 14,),
+                            ],
+                          ),
+                        ),
+                      ),
+                      InkWell(
+                        onTap:(){
+                          setState(() {
+                            _outsideWash[index]=!_outsideWash[index];
+                          });
+                        },
+                        child: Container(
+                          color:_outsideWash[index] ? Colors.greenAccent : Colors.grey.shade300,
+                          padding:EdgeInsets.all(10),
+                          child: Row(
+                            children: [
+                              Text('Outside'),
+                              Icon(
+                                _outsideWash[index] ? Icons.check_box :
+                                Icons.check_box_outline_blank,size: 14,),
+                            ],
+                          ),
+                        ),
+                      ),
+
+
+                    ],
                   );
                 },
               ),
@@ -357,12 +406,13 @@ class _CreateCarState extends State<CreateCar> {
                           'model': modelController.text,
                           'plate': plateNumberController.text,
                           'date_time': formattedDateTime,
+                          'inside': _insideWash.map((value) => '${value}@').join(),
+                          'outside': _outsideWash.map((value) => '${value}@').join(),
                           'user_id': widget.customer.id.toString(),
                           'subscription_id': selectedSubscription.toString(),
                           'image': await MultipartFile.fromFile(path, filename: basename(path)),
                         });
-                        print(formattedDateTime);
-                        createCar(context, formData);
+                        await createCar(context, formData);
                         setState(() { _isLoading=false; });
                       }
                     }
@@ -371,7 +421,7 @@ class _CreateCarState extends State<CreateCar> {
                     primary: Colors.black, // Set background color to black
                   ),
                   child: Text(
-                    _isLoading?'Processing':'Submit',
+                    _isLoading?'Processing..':'Submit',
                     style: TextStyle(color: Colors.white),
                   ),
                 ),

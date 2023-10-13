@@ -22,6 +22,12 @@ class SubscriptionType{
   static String recurring='1';
 }
 
+class TaskApprovalActions{
+  static String pending='0';
+  static String approved='1';
+  static String rescheduleRequested='2';
+}
+
 
 
 class ShPref{
