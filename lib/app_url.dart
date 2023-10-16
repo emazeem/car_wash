@@ -35,4 +35,5 @@ class AppUrl {
   static var storeNotificationDevice = baseUrl + 'storeNotificationDevice';
   static var updateSubscription = baseUrl + 'updateSubscription';
   static var taskAction = baseUrl + 'taskAction';
+  static var updateTask = baseUrl + 'updateTask';
 }

@@ -49,9 +49,9 @@ class _HomeScreenState extends State<HomeScreen> {
       authRole=await ShPref.getAuthRole();
       await _pullAuthUser();
       if(authRole ==  Role.customer){
-        _pullMyCars();
+        await _pullMyCars();
       }else{
-        _pullTasks();
+        await _pullTasks();
       }
 
     });

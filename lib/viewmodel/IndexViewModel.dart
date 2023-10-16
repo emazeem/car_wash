@@ -257,6 +257,21 @@ class IndexViewModel extends ChangeNotifier {
       response['order']['car']=Car.fromJson(response['order']['car']);
       response['order']=Order.fromJson(response['order']);
       _tsk=Task.fromJson(response);
+
+      String timeString = '${_tsk.time}';
+      if (timeString.contains('AM')) {
+        timeString = timeString.replaceAll(' AM', '');
+      } else if (timeString.contains('PM')) {
+        timeString = timeString.replaceAll(' PM', '');
+        List<String> timeComponents = timeString.split(':');
+        int hours = int.parse(timeComponents[0]);
+        if (hours < 12) {
+          hours += 12;
+          timeString = '$hours:${timeComponents[1]}';
+        }
+      }
+      _tsk.date_time='${_tsk.date}T$timeString';
+
       _getStatus = ApiResponse.completed(_tsk);
       _getTask=_tsk;
       notifyListeners();
@@ -557,6 +572,17 @@ class IndexViewModel extends ChangeNotifier {
       Const.toastMessage(e.toString());
     }
   }
+  Future updateTask(dynamic data) async {
+    String authToken= await ShPref.getAuthToken();
+    try{
+      dynamic response = await _apiServices.getPostAuthApiResponse(AppUrl.updateTask, data,authToken);
+      Const.toastMessage(response['message']);
+      return response;
+    }catch(e){
+      Const.toastMessage(e.toString());
+    }
+  }
+
 
   Future addCar(dynamic data) async {
     String authToken= await ShPref.getAuthToken();

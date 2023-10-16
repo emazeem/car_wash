@@ -5,6 +5,7 @@ import 'package:carwash/model/Car.dart';
 import 'package:carwash/model/Customer.dart';
 import 'package:carwash/model/Task.dart';
 import 'package:carwash/screen/CreateCar.dart';
+import 'package:carwash/screen/SingleTask.dart';
 import 'package:carwash/viewmodel/IndexViewModel.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -181,15 +182,18 @@ class _CustomerDetailState extends State<CustomerDetail> {
                                                           Row(
                                                               children: [
                                                                 Text('Inside'),
-                                                                Icon(cars[i]?.order?.tasks?[x].inside_wash==1?Icons.check:Icons.close,size: 15,)
-                                                              ]
-                                                          ),
-                                                          Row(
-                                                              children: [
+                                                                Icon(cars[i]?.order?.tasks?[x].inside_wash==1?Icons.check:Icons.close,size: 15,),
                                                                 Text('Outside'),
                                                                 Icon(cars[i]?.order?.tasks?[x].outside_wash==1?Icons.check:Icons.close,size: 15,)
                                                               ]
+                                                          ),
+
+                                                          if(cars[i]?.order?.tasks?[x].approval ==TaskApprovalActions.rescheduleRequested)
+                                                          Container(
+                                                            width: Const.wi(context)/2,
+                                                            child: Text('${cars[i]?.order?.tasks?[x].comments}',style: TextStyle(color: Colors.red),overflow: TextOverflow.fade,),
                                                           )
+
                                                         ],
                                                       )
                                                     ),
@@ -211,6 +215,13 @@ class _CustomerDetailState extends State<CustomerDetail> {
                                                   ],
                                                 ),
                                                 Spacer(),
+                                                InkWell(
+                                                  onTap: (){
+                                                    Navigator.push(context, MaterialPageRoute(builder: (context) => SingleTaskScreen(id: cars[i]?.order?.tasks?[x].id.toString()))).then((value) => _pullCars());
+
+                                                  },
+                                                  child:  Icon(Icons.edit,),
+                                                ),
                                                 Icon(Icons.check_circle_outline,color: cars[i]?.order?.tasks?[x].status == TaskStatus.pending ? Colors.black: Colors.green,),
                                               ],
                                             ),
