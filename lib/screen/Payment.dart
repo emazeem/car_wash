@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:carwash/constants.dart';
 import 'package:carwash/model/Car.dart';
 import 'package:carwash/payment_configurations.dart';
@@ -67,13 +69,7 @@ class _PaymentPageState extends State<PaymentPage> {
     super.initState();
   }
 
-  List<PaymentItem> _paymentItems = [
-    PaymentItem(
-      label: 'Total',
-      amount: '99.99',
-      status: PaymentItemStatus.final_price,
-    )
-  ];
+
   void onApplePayResult(paymentResult) {
   }
 
@@ -199,7 +195,6 @@ class _PaymentPageState extends State<PaymentPage> {
                       }
                     },
                     style: ElevatedButton.styleFrom(
-                      minimumSize: Size((MediaQuery.of(context).size.width / 2.5), 60,),
                       primary: Const.primaryColor, // Change to your desired button color
                       onPrimary: Colors.white,
                       textStyle: TextStyle(color: Colors.black, fontSize: 22),
@@ -215,7 +210,13 @@ class _PaymentPageState extends State<PaymentPage> {
 
               ApplePayButton(
                 paymentConfiguration: PaymentConfiguration.fromJsonString(defaultApplePay),
-                paymentItems: _paymentItems,
+                paymentItems: [
+                  PaymentItem(
+                    label: 'Total',
+                    amount: '${widget.car?.order?.price}',
+                    status: PaymentItemStatus.final_price,
+                  )
+                ],
                 style: ApplePayButtonStyle.black,
                 type: ApplePayButtonType.buy,
                 margin: const EdgeInsets.only(top: 15.0),

@@ -50,7 +50,7 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
     return Scaffold(
       appBar: Const.appbar('Packages'),
       body: SingleChildScrollView(
-        padding: EdgeInsets.all(20),
+        padding: EdgeInsets.only(top: 20),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -70,17 +70,17 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
                     else
                       for(int i=0;i<subscriptions.length;i++)
                         Container(
-                          width: Const.wi(context)/1.2,
+                          width: Const.wi(context)/1.1,
                           child: Card(
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Container(
+                                /*Container(
                                   width: double.infinity,
                                   height: Const.hi(context)/5,
                                   color: Colors.black,
                                   child: Image.asset('assets/gradient.jpeg'),
-                                ),
+                                ),*/
                                 Visibility(
                                   visible: updateSubscriptionBool[i]==false,
                                   child: Padding(
@@ -90,7 +90,7 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
                                       children: [
                                         Text('${subscriptions[i]?.title}',style: TextStyle(fontWeight: FontWeight.bold),),
                                         (subscriptions[i]?.is_recurring== SubscriptionType.recurring)
-                                        ? Icon(Icons.repeat)
+                                        ? Icon(Icons.repeat,)
                                         : Container(),
                                       ],
                                     ),
