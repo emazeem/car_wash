@@ -240,6 +240,18 @@ class _CreateCarState extends State<CreateCar> {
                     setState(() {
                       showTimeWidget=true;
                       selectedSubscription = subscriptions[i]!.id;
+                      if(subscriptions[i]!.id==1){
+                        setState(() {
+                          _outsideWash=[true,true,true,true];
+                          _insideWash=[false,false,false,false];
+                        });
+                      }
+                      if(subscriptions[i]!.id==2){
+                        setState(() {
+                          _outsideWash=[true,true,true,true];
+                          _insideWash=[true,true,true,true];
+                        });
+                      }
                     });
                   },
                 ),

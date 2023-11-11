@@ -5,6 +5,7 @@ import 'package:carwash/model/Car.dart';
 import 'package:carwash/model/Customer.dart';
 import 'package:carwash/model/Task.dart';
 import 'package:carwash/screen/CreateCar.dart';
+import 'package:carwash/screen/Image.dart';
 import 'package:carwash/screen/SingleTask.dart';
 import 'package:carwash/viewmodel/IndexViewModel.dart';
 import 'package:flutter/material.dart';
@@ -149,7 +150,12 @@ class _CustomerDetailState extends State<CustomerDetail> {
                               Container(
                                 padding: EdgeInsets.all(10),
                                 child: Center(
-                                  child: Image.network('${AppUrl.url}storage/car/${cars[i]?.image}',width: 100,),
+                                  child: InkWell(
+                                    onTap: (){
+                                      Navigator.push(context, MaterialPageRoute(builder: (context) => ShowImage('${AppUrl.url}storage/car/${cars[i]?.image}')));
+                                    },
+                                      child: Image.network('${AppUrl.url}storage/car/${cars[i]?.image}',width: 100,)
+                                  ),
                                 )
                               ),
 
@@ -182,9 +188,9 @@ class _CustomerDetailState extends State<CustomerDetail> {
                                                           Row(
                                                               children: [
                                                                 Text('Inside'),
-                                                                Icon(cars[i]?.order?.tasks?[x].inside_wash==1?Icons.check:Icons.close,size: 15,),
+                                                                Icon(cars[i]?.order?.tasks?[x].inside_wash==1?Icons.check_box:Icons.check_box_outline_blank,size: 15,color: cars[i]?.order?.tasks?[x].inside_wash==1?Colors.green:Colors.red,),
                                                                 Text('Outside'),
-                                                                Icon(cars[i]?.order?.tasks?[x].outside_wash==1?Icons.check:Icons.close,size: 15,)
+                                                                Icon(cars[i]?.order?.tasks?[x].outside_wash==1?Icons.check_box:Icons.check_box_outline_blank,size: 15,color: cars[i]?.order?.tasks?[x].outside_wash==1?Colors.green:Colors.red,)
                                                               ]
                                                           ),
 
@@ -205,8 +211,12 @@ class _CustomerDetailState extends State<CustomerDetail> {
                                                           for (int ii = 0; ii < (cars[i]?.order?.tasks?[x].images?.length ?? 0); ii++)
                                                             Container(
                                                               width: Const.wi(context)/8,
-                                                              height: Const.wi(context)/8,
-                                                              child: Image.network('${cars[i]?.order?.tasks?[x].images?[ii]}'),
+                                                              height: 30,
+                                                              child: InkWell(
+                                                                onTap: (){
+                                                                  Navigator.push(context, MaterialPageRoute(builder: (context) => ShowImage('${cars[i]?.order?.tasks?[x].images?[ii]}')));
+                                                                },
+                                                                  child: Image.network('${cars[i]?.order?.tasks?[x].images?[ii]}')),
                                                               //child: Text('${task!.images![f]}'),
                                                             ),
                                                         ],
@@ -215,13 +225,14 @@ class _CustomerDetailState extends State<CustomerDetail> {
                                                   ],
                                                 ),
                                                 Spacer(),
+                                                cars[i]?.order?.tasks?[x].status == TaskStatus.pending?
                                                 InkWell(
                                                   onTap: (){
                                                     Navigator.push(context, MaterialPageRoute(builder: (context) => SingleTaskScreen(id: cars[i]?.order?.tasks?[x].id.toString()))).then((value) => _pullCars());
 
                                                   },
                                                   child:  Icon(Icons.edit,),
-                                                ),
+                                                ):Container(),
                                                 Icon(Icons.check_circle_outline,color: cars[i]?.order?.tasks?[x].status == TaskStatus.pending ? Colors.black: Colors.green,),
                                               ],
                                             ),

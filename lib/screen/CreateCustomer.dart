@@ -15,6 +15,8 @@ class _AddCustomerPageState extends State<AddCustomerPage> {
   final TextEditingController locationController = TextEditingController();
   final TextEditingController phoneController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+  bool _passwordVisible = true;
 
 
 
@@ -24,6 +26,7 @@ class _AddCustomerPageState extends State<AddCustomerPage> {
     locationController.dispose();
     phoneController.dispose();
     emailController.dispose();
+    _passwordController.dispose();
     super.dispose();
   }
 
@@ -68,6 +71,22 @@ class _AddCustomerPageState extends State<AddCustomerPage> {
               controller: emailController,
               decoration: InputDecoration(labelText: 'Email'),
             ),
+            SizedBox(height: 16),
+            TextField(
+              obscureText: _passwordVisible,
+              controller: _passwordController,
+              decoration: InputDecoration(
+                labelText: 'Password',
+                suffixIcon: GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      _passwordVisible = !_passwordVisible;
+                    });
+                  },
+                  child: new Icon(_passwordVisible ? Icons.visibility : Icons.visibility_off),
+                ),
+              ),
+            ),
 
 
 
@@ -93,14 +112,16 @@ class _AddCustomerPageState extends State<AddCustomerPage> {
                       Const.toastMessage('Name is required.');
                     } else if (emailController.text.isEmpty) {
                       Const.toastMessage('Email is required.');
-                    } else if (phoneController.text.isEmpty) {
+                    }else if (_passwordController.text.isEmpty) {
+                      Const.toastMessage('Password is required.');
+                    }  else if (phoneController.text.isEmpty) {
                       Const.toastMessage('Phone is required.');
                     } else if (locationController.text.isEmpty) {
                       Const.toastMessage('Address is required.');
                     } else {
                       Map<String, dynamic> data = {
                         'name': nameController.text,
-                        'password': 'JHBKJBJ#B',
+                        'password': _passwordController.text,
                         'email': emailController.text,
                         'phone': phoneController.text,
                         'address': locationController.text,

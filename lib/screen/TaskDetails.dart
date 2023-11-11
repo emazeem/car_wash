@@ -5,6 +5,7 @@ import 'package:carwash/app_url.dart';
 import 'package:carwash/constants.dart';
 import 'package:carwash/model/Task.dart';
 import 'package:carwash/model/User.dart';
+import 'package:carwash/screen/Image.dart';
 import 'package:carwash/screen/ShowLocation.dart';
 import 'package:carwash/viewmodel/IndexViewModel.dart';
 import 'package:dio/dio.dart';
@@ -462,7 +463,12 @@ class _TaskScreenState extends State<TaskScreen> {
                                 Container(
                                   width: Const.wi(context)/3,
                                   height: Const.wi(context)/3,
-                                  child: Image.network('${task!.images![f]}'),
+                                  child: InkWell(
+                                    onTap: (){
+                                      Navigator.push(context, MaterialPageRoute(builder: (context) => ShowImage('${task!.images![f]}')));
+                                    },
+                                      child: Image.network('${task!.images![f]}')
+                                  ),
                                   //child: Text('${task!.images![f]}'),
                                 ),
                             ],

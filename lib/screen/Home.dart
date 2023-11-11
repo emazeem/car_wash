@@ -8,6 +8,7 @@ import 'package:carwash/model/Task.dart';
 import 'package:carwash/model/TaskWithDate.dart';
 import 'package:carwash/model/User.dart';
 import 'package:carwash/screen/CustomerDetails.dart';
+import 'package:carwash/screen/Image.dart';
 import 'package:carwash/screen/Payment.dart';
 import 'package:carwash/screen/ShowLocation.dart';
 import 'package:carwash/screen/TaskDetails.dart';
@@ -295,7 +296,12 @@ class _HomeScreenState extends State<HomeScreen> {
                                                   Container(
                                                       padding: EdgeInsets.all(10),
                                                       child: Center(
-                                                        child: Image.network('${AppUrl.url}storage/car/${tasks[x]!.tasks![y].order?.car?.image}',width: 70,),
+                                                        child: InkWell(
+                                                          onTap: (){
+                                                            Navigator.push(context, MaterialPageRoute(builder: (context) => ShowImage('${AppUrl.url}storage/car/${tasks[x]!.tasks![y].order?.car?.image}')));
+
+                                                          },
+                                                            child: Image.network('${AppUrl.url}storage/car/${tasks[x]!.tasks![y].order?.car?.image}',width: 70,)),
                                                       )
                                                   ),
                                                 ],

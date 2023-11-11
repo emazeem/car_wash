@@ -4,6 +4,7 @@ import 'package:carwash/model/Car.dart';
 import 'package:carwash/model/Customer.dart';
 import 'package:carwash/screen/CreateCustomer.dart';
 import 'package:carwash/screen/CustomerDetails.dart';
+import 'package:carwash/screen/DeleteAccount.dart';
 import 'package:carwash/viewmodel/IndexViewModel.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -96,9 +97,20 @@ class _CustomerPageState extends State<CustomerPage> {
                                     ),
 
                                     Text('Customer ID:${customers[x]?.id}'),
-
                                   ],
                                 ),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  children: [
+                                    InkWell(
+                                      onTap: (){
+                                        Navigator.push(context, MaterialPageRoute(builder: (context) => DeleteAccountPage(id: customers[x]?.id))).then((value) => _pullRefresh());
+                                      },
+                                      child: Icon(Icons.delete_outline,color: Colors.red,),
+                                    ),
+
+                                  ],
+                                )
                               ],
                             ),
                           ),

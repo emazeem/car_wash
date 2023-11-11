@@ -227,7 +227,7 @@ class _CWLayoutState extends State<CWLayout> {
                 leading: Icon(Icons.delete_outline,color: Colors.white,),
                 title: Text('Delete Account',style:TextStyle(color: Colors.white),),
                 onTap: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => DeleteAccountPage()));
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => DeleteAccountPage(id: authUser?.id,)));
                   // Handle order history menu action
                 },
               ),
