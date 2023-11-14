@@ -13,6 +13,7 @@ import 'package:carwash/screen/Payment.dart';
 import 'package:carwash/screen/Profile.dart';
 import 'package:carwash/screen/SingleTask.dart';
 import 'package:carwash/screen/Subscription.dart';
+import 'package:carwash/screen/Technicians.dart';
 import 'package:carwash/screen/Transactions.dart';
 import 'package:carwash/viewmodel/IndexViewModel.dart';
 import 'package:flutter/material.dart';
@@ -155,6 +156,16 @@ class _CWLayoutState extends State<CWLayout> {
                   // Handle packages menu action
                 },
               ),
+            if(authUser?.role==Role.manager)
+              ListTile(
+                leading: Icon(Icons.supervised_user_circle_rounded),
+                title: Text('Technicians'),
+                onTap: () {
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => TechniciansPage()));
+                  // Handle packages menu action
+                },
+              ),
+
             if(authUser?.role==Role.manager || authUser?.role==Role.customer)
               ListTile(
               leading: Icon(Icons.padding),

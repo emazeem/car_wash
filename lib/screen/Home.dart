@@ -86,8 +86,8 @@ class _HomeScreenState extends State<HomeScreen> {
                   padding: EdgeInsets.all(10),
                   child: Text('My Cars',style: TextStyle(fontSize: 25),),
 
-                )
-              else
+                ),
+              if(authUser?.role==Role.technician || authUser?.role==Role.manager)
                 Container(
                   margin: EdgeInsets.only(top: 10,left: 10,right: 10),
                   child: Row(

@@ -7,6 +7,7 @@ class AppUrl {
   static var createCarSubscription = baseUrl + 'createCarSubscription';
   static var cancelSubscription = baseUrl + 'cancelSubscription';
   static var fetchCustomers = baseUrl + 'fetchCustomers';
+  static var fetchTechnicians = baseUrl + 'fetchTechnicians';
   static var fetchSubscriptions = baseUrl + 'fetchSubscriptions';
   static var fetchInvoices = baseUrl + 'fetchInvoices';
   static var fetchCars= baseUrl + 'fetchCars';

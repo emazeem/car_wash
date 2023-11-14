@@ -34,7 +34,6 @@
 	<string>Car wash is using images for its users.</string>
 	<key>NSCameraUsageDescription</key>
 	<string>Car wash is using camera for its users to upload car images.</string>
-
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
 	<key>UILaunchStoryboardName</key>

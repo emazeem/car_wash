@@ -54,6 +54,32 @@ class IndexViewModel extends ChangeNotifier {
     }
   }
   ///////////////////////////////////////////////////////
+  List<Customer?> _getTechniciansList=[];
+  List<Customer?> get getTechniciansList => _getTechniciansList;
+  void setTechniciansList(List<Customer> data) {
+    _getTechniciansList = data;
+    notifyListeners();
+  }
+  Future fetchTechniciansList(dynamic data) async {
+    var authToken = await ShPref.getAuthToken();
+    try{
+      _getStatus = ApiResponse.loading('Fetching technicians');
+      dynamic response = await _apiServices.getPostAuthApiResponse(AppUrl.fetchTechnicians, data, authToken);
+      List<Customer?> customers=[];
+      response['data'].forEach((item) {
+        customers.add(Customer.fromJson(item));
+      });
+      _getStatus = ApiResponse.completed(customers);
+      _getTechniciansList=customers;
+      notifyListeners();
+
+    }catch(e){
+      _getStatus = ApiResponse.error('Please try again.!');
+      notifyListeners();
+    }
+  }
+
+  ///////////////////////////////////////////////////////
   List<Activity?> _getActivities=[];
   List<Activity?> get getActivities => _getActivities;
   void setActivity(List<Activity> data) {
