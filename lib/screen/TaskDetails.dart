@@ -128,8 +128,8 @@ class _TaskScreenState extends State<TaskScreen> {
                             Container(
                               width: Const.wi(context)/1.3,
                               child: InkWell(
-                                onTap: (){
-                                  if(task?.order?.user?.long != null){
+                                onTap: ()async{
+                                  /*if(task?.order?.user?.long != null){
                                     Navigator.push(context, MaterialPageRoute(builder: (context) => ShowLocation(
                                         User(
                                           id: task?.order?.user?.id,
@@ -139,10 +139,17 @@ class _TaskScreenState extends State<TaskScreen> {
                                           address: task?.order?.user?.location,
                                         )
                                     )));
+                                  }*/
+                                  String url = '${task?.order?.user?.location}';
+                                  if (await canLaunch(url)) {
+                                    await launch(url);
+                                  } else {
+                                    Const.toastMessage('Something went wrong');
                                   }
+
                                 },
                                   child: Text('${task?.order?.user?.location}',overflow: TextOverflow.fade,
-                                    style: TextStyle(color: task?.order?.user?.long == null ? Colors.red : Colors.green),
+                                    style: TextStyle( color:Colors.green),
                                   )
                               ),
                             )
@@ -294,7 +301,8 @@ class _TaskScreenState extends State<TaskScreen> {
 
 
 
-                        task?.order?.payment == OrderPayment.pending
+                        if(task?.order?.receipt!=null )
+                        (task?.order?.payment == OrderPayment.pending)
                             ? Container(
                                 margin: EdgeInsets.only(right: 16.0),
                                 child: ElevatedButton(

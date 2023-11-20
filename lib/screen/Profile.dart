@@ -111,7 +111,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    ElevatedButton(
+                    /*ElevatedButton(
                       style: ElevatedButton.styleFrom(
                         primary: Colors.amber, // Set the background color to black
                       ),
@@ -119,7 +119,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         Navigator.push(context, MaterialPageRoute(builder: (context) => HomeLocationScreen()));
                       },
                       child: Text('My Google Location'),
-                    ),
+                    ),*/
                     ElevatedButton(
                       style: ElevatedButton.styleFrom(
                         primary: Const.primaryColor, // Set the background color to black
@@ -144,7 +144,7 @@ class _ProfilePageState extends State<ProfilePage> {
                               setState(() { _loading=true; });
                               Map response=await _indexViewModel.editUser(data);
                             }catch(e){ }
-                            setState(() { _loading=true; });
+                            setState(() { _loading=false; });
                           }
                         }
                       },

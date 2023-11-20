@@ -16,6 +16,7 @@ import 'package:carwash/viewmodel/IndexViewModel.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localization/flutter_localization.dart';
 import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -69,7 +70,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       body: Container(
         width: Const.wi(context),
-        height: Const.hi(context)-200,
+        height: Const.hi(context)-150,
         child: RefreshIndicator(
           onRefresh: ()async{
             if(authUser?.role == Role.customer){
@@ -85,7 +86,6 @@ class _HomeScreenState extends State<HomeScreen> {
                   width: double.infinity,
                   padding: EdgeInsets.all(10),
                   child: Text('My Cars',style: TextStyle(fontSize: 25),),
-
                 ),
               if(authUser?.role==Role.technician || authUser?.role==Role.manager)
                 Container(
@@ -111,7 +111,6 @@ class _HomeScreenState extends State<HomeScreen> {
                     ],
                   ),
                 ),
-
               if(_indexViewModel.getStatus.status ==  Status.IDLE)
                 if(authUser?.role==Role.customer)
                   if(cars.length==0)
@@ -123,89 +122,124 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                     )
                   else
-                    for(int x=0;x<cars.length;x++)
-                      Container(
-                        margin: EdgeInsets.only(top: 10,left: 10,right: 10),
-                        width: Const.wi(context),
-                        child: Container(
-                          color: Colors.grey.shade200,
-                          padding: EdgeInsets.all(10),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text('${cars[x]?.make}',style: TextStyle(fontWeight: FontWeight.bold,fontSize: 20),),
-                                  Text('${cars[x]?.model}',style: TextStyle(fontSize: 20),),
-                                ],
-                              ),
-                              SizedBox(height: 10,),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text('${cars[x]?.plate}',style: TextStyle(fontSize: 20),),
-                                ],
-                              ),
-                              SizedBox(height: 10,),
-                              Container(height: 1,color: Colors.black12,),
-                              SizedBox(height: 10,),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text('Order # ${cars[x]?.order?.id.toString().padLeft(4, '0')}',style: TextStyle(fontSize: 20),),
-                                  Text('${cars[x]?.order?.price} SAR',style: TextStyle(fontSize: 20),),
+                   SingleChildScrollView(
+                     scrollDirection: Axis.vertical,
+                     child: Container(
+                       width: Const.wi(context),
+                       height: Const.hi(context)-200,
+                       child:  GridView(
+                         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                           crossAxisCount: 2,
+                           crossAxisSpacing: 5,
+                           mainAxisSpacing: 5,
+                           childAspectRatio: MediaQuery.of(context).size.width / (MediaQuery.of(context).size.height-130),
+                         ),
+                         children: [
+                           for(int x=0;x<cars.length;x++)
+                             Container(
+                               width: Const.wi(context)/2,
+                               decoration: BoxDecoration(
+                                   color: Colors.grey.shade200,
+                                   border: Border.all(
+                                     color: Colors.black26
+                                   )
+                               ),
+                               child: Column(
+                                 children: [
+                                    Stack(
+                                      children: [
+                                        Image.network('${AppUrl.url}storage/car/${cars[x]?.image}',width: double.infinity,height: Const.hi(context)/4.5,fit: BoxFit.cover,),
+                                        Container(
+                                          margin: EdgeInsets.only(left: 5,top: 5),
+                                          padding: EdgeInsets.symmetric(vertical: 4,horizontal: 10),
+                                           decoration: BoxDecoration(
+                                             color: Colors.black,
+                                             borderRadius: BorderRadius.circular(20),
+                                           ),
+                                           child: Text('${cars[x]?.order?.price} SAR',style: TextStyle(color: Colors.white),textAlign: TextAlign.right,),
+                                        )
+                                      ],
+                                    ),
 
-                                ],
-                              ),
-                              SizedBox(height: 10,),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Row(
-                                    children: [
-                                      if(cars[x]?.order?.subscription_id!=3)
-                                        Icon(Icons.refresh),
-                                      Text('${cars[x]?.order?.subscription?.title} ',style: TextStyle(fontSize: 20),),
-                                    ],
-                                  ),
-
-                                  Row(
-                                    children: [
-
-                                      ElevatedButton(
-                                        onPressed: ()async {
-                                          Navigator.push(context, MaterialPageRoute(builder: (context) => CustomerDetail(customer: cars[x]!.customer!,carId:  cars[x]!.id,))).then((value) => _pullMyCars());
-
-                                        },
-                                        style: ElevatedButton.styleFrom(
-                                          primary: Colors.black, // Background color
-                                        ),
-                                        child: Text('Show Details', style: TextStyle(color: Colors.white)),
-                                      ),
-                                      SizedBox(width: 10,),
-
-                                      if(cars[x]?.order?.payment == OrderPayment.pending)
-                                        ElevatedButton(
-                                          onPressed: ()async {
-                                            Navigator.push(context, MaterialPageRoute(builder: (context) => PaymentPage(car: cars[x],))).then((value) => _pullMyCars());
-
-                                          },
-                                          style: ElevatedButton.styleFrom(
-                                            primary: Colors.black, // Background color
+                                    Container(
+                                      padding: EdgeInsets.only(top: 7,bottom: 7),
+                                      color: Colors.black,
+                                      child:  Column(
+                                        children: [
+                                          SingleChildScrollView(
+                                            scrollDirection: Axis.horizontal,
+                                            child: Row(
+                                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                              children: [
+                                                Text('${cars[x]?.make}',style: TextStyle(fontWeight: FontWeight.bold,color: Colors.white),),
+                                                Text(' - ${cars[x]?.model}',style: TextStyle(color: Colors.white),),
+                                              ],
+                                            ),
                                           ),
-                                          child: Text('Pay Now', style: TextStyle(color: Colors.white)),
-                                        ),
+                                          Row(
+                                            mainAxisAlignment: MainAxisAlignment.center,
+                                            children: [
+                                              Text('${cars[x]?.plate}',style: TextStyle(color: Colors.white),),
+                                            ],
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                   SizedBox(height: 10,),
+                                   Container(
+                                     padding: EdgeInsets.all(5),
+                                     child: Column(
+                                       children: [
+                                         Row(
+                                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                           children: [
+                                             Text('Order # ${cars[x]?.order?.id.toString().padLeft(4, '0')}',style: TextStyle(fontWeight: FontWeight.bold),),
+                                           ],
+                                         ),
+                                         Row(
+                                           children: [
+                                             Text('Subscription : ',style: TextStyle(fontWeight: FontWeight.bold),),
+                                             Text('${cars[x]?.order?.subscription?.title}'),
+                                             if(cars[x]?.order?.subscription_id!=3)
+                                               Icon(Icons.refresh,size: 14,),
+                                           ],
+                                         ),
+                                         Row(
+                                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                           children: [
+                                             ElevatedButton(
+                                               onPressed: ()async {
+                                                 Navigator.push(context, MaterialPageRoute(builder: (context) => CustomerDetail(customer: cars[x]!.customer!,carId:  cars[x]!.id,))).then((value) => _pullMyCars());
+                                               },
+                                               style: ElevatedButton.styleFrom(
+                                                 primary: Colors.black, // Background color
+                                               ),
+                                               child: Text('Details', style: TextStyle(color: Colors.white)),
+                                             ),
+                                             if(cars[x]?.order?.payment == OrderPayment.pending)
+                                               ElevatedButton(
+                                                 onPressed: ()async {
+                                                   Navigator.push(context, MaterialPageRoute(builder: (context) => PaymentPage(car: cars[x],))).then((value) => _pullMyCars());
 
-                                    ],
-                                  )
-                                ],
-                              ),
+                                                 },
+                                                 style: ElevatedButton.styleFrom(
+                                                   primary: Colors.black, // Background color
+                                                 ),
+                                                 child: Text('Pay Now', style: TextStyle(color: Colors.white)),
+                                               ),
 
-                            ],
-                          ),
-                        ),
-                      )
+                                           ],
+                                         ),
+                                       ],
+                                     ),
+                                   )
+                                 ],
+                               ),
+                             ),
+                         ],
+                       ),
+                     ),
+                   )
                 else
                   if(tasks.length==0)
                     Center(
@@ -222,100 +256,104 @@ class _HomeScreenState extends State<HomeScreen> {
                       Container(
                         margin: EdgeInsets.only(top: 10,left: 10,right: 10),
                         width: Const.wi(context),
-                        child: Container(
-                          padding: EdgeInsets.all(20),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
+                        padding: EdgeInsets.all(20),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text('${tasks[x]?.date}',style: TextStyle(fontWeight: FontWeight.bold,fontSize: 20),),
+                              ],
+                            ),
+                            Container(
+                              child: Column(
                                 children: [
-                                  Text('${tasks[x]?.date}',style: TextStyle(fontWeight: FontWeight.bold,fontSize: 20),),
-                                ],
-                              ),
-                              Container(
-                                child: Column(
-                                  children: [
-                                    for(int y=0; y < tasks[x]!.tasks!.length; y++ )
-                                      InkWell(
-                                        onTap:(){
-                                          if(tasks[x]!.tasks![y].accessor==true){
-                                            Task _tysk = tasks[x]!.tasks![y];
-                                            Navigator.push(context, MaterialPageRoute(builder: (context) => TaskScreen(task: _tysk,))).then((value) => _pullTasks());
-                                          }else{
-                                            Const.toastMessage('Its previous car washes are pending');
-                                          }
-                                        },
-                                        child: Container(
-                                          width: Const.wi(context)-10,
-                                          padding: EdgeInsets.all(20),
-                                          margin: EdgeInsets.all(5),
-                                          color: (tasks[x]!.tasks![y].accessor == false)
-                                              ? Colors.grey.shade200
-                                              : (tasks[x]!.tasks![y].status==TaskStatus.complete)
-                                              ? Colors.green.shade100
-                                              : Colors.blue.shade50,
-                                          child: Column(
-                                            crossAxisAlignment: CrossAxisAlignment.start,
-                                            children: [
-                                              Row(
-                                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                children: [
-                                                  Text('${tasks[x]!.tasks![y].order?.user?.name} ',style: TextStyle(fontSize: 18,fontWeight: FontWeight.bold),),
+                                  for(int y=0; y < tasks[x]!.tasks!.length; y++ )
+                                    InkWell(
+                                      onTap:(){
+                                        if(tasks[x]!.tasks![y].accessor==true){
+                                          Task _tysk = tasks[x]!.tasks![y];
+                                          Navigator.push(context, MaterialPageRoute(builder: (context) => TaskScreen(task: _tysk,))).then((value) => _pullTasks());
+                                        }else{
+                                          Const.toastMessage('Its previous car washes are pending');
+                                        }
+                                      },
+                                      child: Container(
+                                        width: Const.wi(context)-10,
+                                        padding: EdgeInsets.all(20),
+                                        margin: EdgeInsets.all(5),
+                                        color: (tasks[x]!.tasks![y].accessor == false)
+                                            ? Colors.grey.shade200
+                                            : (tasks[x]!.tasks![y].status==TaskStatus.complete)
+                                            ? Colors.green.shade100
+                                            : Colors.blue.shade50,
+                                        child: Column(
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          children: [
+                                            Row(
+                                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                              children: [
+                                                Text('${tasks[x]!.tasks![y].order?.user?.name} ',style: TextStyle(fontSize: 18,fontWeight: FontWeight.bold),),
 
-                                                  if(tasks[x]!.tasks![y].order?.user?.long != null)
-                                                    InkWell(
-                                                      onTap: (){
-                                                        Navigator.push(context, MaterialPageRoute(builder: (context) => ShowLocation(
-                                                            User(
-                                                              id: tasks[x]!.tasks![y].order?.user?.id,
-                                                              name: tasks[x]!.tasks![y].order?.user?.name,
-                                                              long: tasks[x]!.tasks![y].order?.user?.long,
-                                                              lat: tasks[x]!.tasks![y].order?.user?.lat,
-                                                              address: tasks[x]!.tasks![y].order?.user?.location,
-                                                            )
-                                                        )));
-                                                      },
-                                                      child: Icon(Icons.pin_drop_outlined),
+                                                if(tasks[x]!.tasks![y].order?.user?.long != null)
+                                                  InkWell(
+                                                    onTap: ()async{
+                                                      /*Navigator.push(context, MaterialPageRoute(builder: (context) => ShowLocation(
+                                                          User(
+                                                            id: tasks[x]!.tasks![y].order?.user?.id,
+                                                            name: tasks[x]!.tasks![y].order?.user?.name,
+                                                            long: tasks[x]!.tasks![y].order?.user?.long,
+                                                            lat: tasks[x]!.tasks![y].order?.user?.lat,
+                                                            address: tasks[x]!.tasks![y].order?.user?.location,
+                                                          )
+                                                      )));*/
+                                                      String url = '${tasks[x]!.tasks![y].order?.user?.location}';
+                                                      if (await canLaunch(url)) {
+                                                      await launch(url);
+                                                      } else {
+                                                      Const.toastMessage('Something went wrong');
+                                                      }
+                                                    },
+                                                    child: Icon(Icons.pin_drop_outlined),
+                                                  )
+                                              ],
+                                            ),
+
+                                            Row(
+                                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                              children: [
+                                                Column(
+                                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                                  children: [
+                                                    Text('Car ➤ ${tasks[x]!.tasks![y].order?.car?.make} | ${tasks[x]!.tasks![y].order?.car?.model} | ${tasks[x]!.tasks![y].order?.car?.plate}'),
+                                                    Text('Subscription ➤ ${tasks[x]!.tasks![y].order?.subscription?.title}'),
+                                                    Text('Status ➤ ${tasks[x]!.tasks![y].status == TaskStatus.pending ? ' Pending' : 'Done'}')
+                                                  ],
+                                                ),
+                                                (tasks[x]!.tasks![y].order?.car?.image == null)? Container():
+                                                Container(
+                                                    padding: EdgeInsets.all(10),
+                                                    child: Center(
+                                                      child: InkWell(
+                                                        onTap: (){
+                                                          Navigator.push(context, MaterialPageRoute(builder: (context) => ShowImage('${AppUrl.url}storage/car/${tasks[x]!.tasks![y].order?.car?.image}')));
+
+                                                        },
+                                                          child: Image.network('${AppUrl.url}storage/car/${tasks[x]!.tasks![y].order?.car?.image}',width: 40,height: 70,)),
                                                     )
-                                                ],
-                                              ),
+                                                ),
+                                              ],
+                                            ),
 
-                                              Row(
-                                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                children: [
-                                                  Column(
-                                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                                    children: [
-                                                      Text('Car ➤ ${tasks[x]!.tasks![y].order?.car?.make} | ${tasks[x]!.tasks![y].order?.car?.model} | ${tasks[x]!.tasks![y].order?.car?.plate}'),
-                                                      Text('Subscription ➤ ${tasks[x]!.tasks![y].order?.subscription?.title}'),
-                                                      Text('Status ➤ ${tasks[x]!.tasks![y].status == TaskStatus.pending ? ' Pending' : 'Done'}')
-                                                    ],
-                                                  ),
-                                                  (tasks[x]!.tasks![y].order?.car?.image == null)? Container():
-                                                  Container(
-                                                      padding: EdgeInsets.all(10),
-                                                      child: Center(
-                                                        child: InkWell(
-                                                          onTap: (){
-                                                            Navigator.push(context, MaterialPageRoute(builder: (context) => ShowImage('${AppUrl.url}storage/car/${tasks[x]!.tasks![y].order?.car?.image}')));
-
-                                                          },
-                                                            child: Image.network('${AppUrl.url}storage/car/${tasks[x]!.tasks![y].order?.car?.image}',width: 70,)),
-                                                      )
-                                                  ),
-                                                ],
-                                              ),
-
-                                            ],
-                                          ),
+                                          ],
                                         ),
                                       ),
-                                  ],
-                                ),
-                              )
-                            ],
-                          ),
+                                    ),
+                                ],
+                              ),
+                            ),
+                          ],
                         ),
                       )
                 else if (_indexViewModel.getStatus.status == Status.BUSY)
@@ -324,9 +362,6 @@ class _HomeScreenState extends State<HomeScreen> {
                   height: Const.hi(context)/1.2,
                   child:   Const.LoadingIndictorWidtet(),
                 ),
-
-
-
 
               Visibility(
                 visible: false,
@@ -388,20 +423,6 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                 ),
               ),
-
-
-
-
-
-
-
-
-
-
-
-
-
-
             ],
           ),
         ),

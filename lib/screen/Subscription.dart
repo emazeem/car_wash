@@ -1,6 +1,7 @@
 import 'package:carwash/constants.dart';
 import 'package:carwash/model/Product.dart';
 import 'package:carwash/model/Subscription.dart';
+import 'package:carwash/model/User.dart';
 import 'package:carwash/viewmodel/IndexViewModel.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -28,11 +29,15 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
     Provider.of<IndexViewModel>(context, listen: false).fetchSubscriptions({});
   }
 
+  String? authRole;
+
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
       Provider.of<IndexViewModel>(context, listen: false).setSubscriptions([]);
       _pullSubscriptions();
+      authRole=await ShPref.getAuthRole();
+
     });
     super.initState();
   }
@@ -75,12 +80,6 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                /*Container(
-                                  width: double.infinity,
-                                  height: Const.hi(context)/5,
-                                  color: Colors.black,
-                                  child: Image.asset('assets/gradient.jpeg'),
-                                ),*/
                                 Visibility(
                                   visible: updateSubscriptionBool[i]==false,
                                   child: Padding(
@@ -104,7 +103,8 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
                                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                       children: [
                                         Text('${subscriptions[i]?.price} SAR'),
-                                        InkWell(
+                                        authRole==Role.manager
+                                            ? InkWell(
                                           onTap: (){
                                             setState(() {
                                               _titleController.text='${subscriptions[i]?.title}';
@@ -116,6 +116,8 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
                                           },
                                           child: Text('Update',style: TextStyle(fontWeight: FontWeight.bold),),
                                         )
+                                            : Container(),
+
                                       ],
                                     ),
                                   ),
