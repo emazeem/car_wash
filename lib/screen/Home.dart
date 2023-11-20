@@ -15,6 +15,7 @@ import 'package:carwash/screen/TaskDetails.dart';
 import 'package:carwash/viewmodel/IndexViewModel.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localization/flutter_localization.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -28,6 +29,7 @@ class _HomeScreenState extends State<HomeScreen> {
   final FlutterLocalization _localization = FlutterLocalization.instance;
 
   String? authRole;
+  int? selectedDate=0;
 
   Future<void> _pullTasks() async {
     Provider.of<IndexViewModel>(context, listen: false).setTasksList([]);
@@ -43,7 +45,19 @@ class _HomeScreenState extends State<HomeScreen> {
     Provider.of<IndexViewModel>(context, listen: false).fetchUser();
   }
 
+  formatDate(originalDate){
+    DateTime dateTime = DateTime.parse(originalDate);
+    String desiredFormat = "MMMM dd, yyyy";
+    return DateFormat(desiredFormat).format(dateTime);
+  }
+  formatDate2(originalDate){
+    DateTime dateTime = DateTime.parse(originalDate);
+    String desiredFormat = "dd MMM";
+    return DateFormat(desiredFormat).format(dateTime);
+  }
 
+
+  bool showSideBar=false;
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
@@ -71,7 +85,7 @@ class _HomeScreenState extends State<HomeScreen> {
       body: Container(
         width: Const.wi(context),
         height: Const.hi(context)-150,
-        child: RefreshIndicator(
+        child: (authUser?.role==Role.customer) ? RefreshIndicator(
           onRefresh: ()async{
             if(authUser?.role == Role.customer){
               await _pullMyCars();
@@ -79,40 +93,14 @@ class _HomeScreenState extends State<HomeScreen> {
               await _pullTasks();
             }
           },
-          child: ListView(
+          child:  ListView(
             children: [
-              if(authUser?.role==Role.customer)
-                Container(
+              Container(
                   width: double.infinity,
                   padding: EdgeInsets.all(10),
                   child: Text('My Cars',style: TextStyle(fontSize: 25),),
                 ),
-              if(authUser?.role==Role.technician || authUser?.role==Role.manager)
-                Container(
-                  margin: EdgeInsets.only(top: 10,left: 10,right: 10),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      Container(
-                        padding: EdgeInsets.all(10),
-                        color: Colors.grey.shade200,
-                        child: Text('Upcomming',style: TextStyle(fontWeight: FontWeight.bold),),
-                      ),
-                      Container(
-                        padding: EdgeInsets.all(10),
-                        color: Colors.blue.shade50,
-                        child: Text('Pending',style: TextStyle(fontWeight: FontWeight.bold)),
-                      ),
-                      Container(
-                        padding: EdgeInsets.all(10),
-                        color: Colors.green.shade100,
-                        child: Text('Completed',style: TextStyle(fontWeight: FontWeight.bold)),
-                      ),
-                    ],
-                  ),
-                ),
               if(_indexViewModel.getStatus.status ==  Status.IDLE)
-                if(authUser?.role==Role.customer)
                   if(cars.length==0)
                     Container(
                       width: double.infinity,
@@ -240,7 +228,37 @@ class _HomeScreenState extends State<HomeScreen> {
                        ),
                      ),
                    )
-                else
+
+                else if (_indexViewModel.getStatus.status == Status.BUSY)
+                Container(
+                  width: Const.wi(context),
+                  height: Const.hi(context)/1.2,
+                  child:   Const.LoadingIndictorWidtet(),
+                ),
+            ],
+          ),
+        ) : Container(
+          child: Column(
+            children: [
+                Container(
+                  padding: EdgeInsets.all(10),
+                  color: Colors.grey.shade200,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      InkWell(
+                        onTap:(){
+                          setState(() {
+                            showSideBar=!showSideBar;
+                          });
+                        },
+                          child: Icon(Icons.filter_list,size: 25,)
+                      ),
+                      selectedDate!=null ? Text('${formatDate(tasks[selectedDate!]!.date)}',style: TextStyle(fontWeight: FontWeight.w500,fontSize: 20),) : Container(),
+                    ],
+                  ),
+                ),
+                if(_indexViewModel.getStatus.status ==  Status.IDLE)
                   if(tasks.length==0)
                     Center(
                       child: Container(
@@ -252,211 +270,169 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                     )
                   else
-                    for(int x=0;x<tasks.length;x++)
-                      Container(
-                        margin: EdgeInsets.only(top: 10,left: 10,right: 10),
-                        width: Const.wi(context),
-                        padding: EdgeInsets.all(20),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text('${tasks[x]?.date}',style: TextStyle(fontWeight: FontWeight.bold,fontSize: 20),),
-                              ],
-                            ),
-                            Container(
+                    Container(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Visibility(
+                            visible: showSideBar,
+                            child: Container(
+                              margin:EdgeInsets.only(top: 10),
+                              width: Const.wi(context)/5,
                               child: Column(
                                 children: [
-                                  for(int y=0; y < tasks[x]!.tasks!.length; y++ )
+                                  for(int x=0;x<tasks.length;x++)
                                     InkWell(
-                                      onTap:(){
-                                        if(tasks[x]!.tasks![y].accessor==true){
-                                          Task _tysk = tasks[x]!.tasks![y];
-                                          Navigator.push(context, MaterialPageRoute(builder: (context) => TaskScreen(task: _tysk,))).then((value) => _pullTasks());
-                                        }else{
-                                          Const.toastMessage('Its previous car washes are pending');
-                                        }
-                                      },
-                                      child: Container(
-                                        width: Const.wi(context)-10,
-                                        padding: EdgeInsets.all(20),
-                                        margin: EdgeInsets.all(5),
-                                        color: (tasks[x]!.tasks![y].accessor == false)
-                                            ? Colors.grey.shade200
-                                            : (tasks[x]!.tasks![y].status==TaskStatus.complete)
-                                            ? Colors.green.shade100
-                                            : Colors.blue.shade50,
-                                        child: Column(
-                                          crossAxisAlignment: CrossAxisAlignment.start,
-                                          children: [
-                                            Row(
-                                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                              children: [
-                                                Text('${tasks[x]!.tasks![y].order?.user?.name} ',style: TextStyle(fontSize: 18,fontWeight: FontWeight.bold),),
-
-                                                if(tasks[x]!.tasks![y].order?.user?.long != null)
-                                                  InkWell(
-                                                    onTap: ()async{
-                                                      /*Navigator.push(context, MaterialPageRoute(builder: (context) => ShowLocation(
-                                                          User(
-                                                            id: tasks[x]!.tasks![y].order?.user?.id,
-                                                            name: tasks[x]!.tasks![y].order?.user?.name,
-                                                            long: tasks[x]!.tasks![y].order?.user?.long,
-                                                            lat: tasks[x]!.tasks![y].order?.user?.lat,
-                                                            address: tasks[x]!.tasks![y].order?.user?.location,
-                                                          )
-                                                      )));*/
-                                                      String url = '${tasks[x]!.tasks![y].order?.user?.location}';
-                                                      if (await canLaunch(url)) {
-                                                      await launch(url);
-                                                      } else {
-                                                      Const.toastMessage('Something went wrong');
-                                                      }
-                                                    },
-                                                    child: Icon(Icons.pin_drop_outlined),
-                                                  )
-                                              ],
-                                            ),
-
-                                            Row(
-                                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                              children: [
-                                                Column(
-                                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                                  children: [
-                                                    Text('Car ➤ ${tasks[x]!.tasks![y].order?.car?.make} | ${tasks[x]!.tasks![y].order?.car?.model} | ${tasks[x]!.tasks![y].order?.car?.plate}'),
-                                                    Text('Subscription ➤ ${tasks[x]!.tasks![y].order?.subscription?.title}'),
-                                                    Text('Status ➤ ${tasks[x]!.tasks![y].status == TaskStatus.pending ? ' Pending' : 'Done'}')
-                                                  ],
-                                                ),
-                                                (tasks[x]!.tasks![y].order?.car?.image == null)? Container():
-                                                Container(
-                                                    padding: EdgeInsets.all(10),
-                                                    child: Center(
-                                                      child: InkWell(
-                                                        onTap: (){
-                                                          Navigator.push(context, MaterialPageRoute(builder: (context) => ShowImage('${AppUrl.url}storage/car/${tasks[x]!.tasks![y].order?.car?.image}')));
-
-                                                        },
-                                                          child: Image.network('${AppUrl.url}storage/car/${tasks[x]!.tasks![y].order?.car?.image}',width: 40,height: 70,)),
-                                                    )
-                                                ),
-                                              ],
-                                            ),
-
-                                          ],
-                                        ),
-                                      ),
+                                        onTap: (){
+                                          setState(() {
+                                            selectedDate=x;
+                                          });
+                                        },
+                                        child: Container(
+                                          decoration: BoxDecoration(
+                                            color: x==selectedDate ? Colors.black : Colors.grey.shade200,
+                                            borderRadius: BorderRadius.circular(4)
+                                          ),
+                                            padding: EdgeInsets.all(10),
+                                            margin: EdgeInsets.only(top: 4,bottom: 4,left: 4),
+                                            child: Text('${formatDate2(tasks[x]?.date)}',style: TextStyle(color: x==selectedDate ? Colors.white:Colors.black),)
+                                        )
                                     ),
                                 ],
                               ),
                             ),
-                          ],
-                        ),
-                      )
-                else if (_indexViewModel.getStatus.status == Status.BUSY)
-                Container(
-                  width: Const.wi(context),
-                  height: Const.hi(context)/1.2,
-                  child:   Const.LoadingIndictorWidtet(),
-                ),
-
-              Visibility(
-                visible: false,
-                child: Container(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Column(
-                    children: [
-                      Row(
-                        children: [
-                          Expanded(
-                            child: ElevatedButton(
-                              child: const Text('English'),
-                              onPressed: () {
-                                _localization.translate('en');
-                              },
-                            ),
                           ),
-                          const SizedBox(width: 8.0),
-                          Expanded(
-                            child: ElevatedButton(
-                              child: const Text('Arabic'),
-                              onPressed: () {
-                                _localization.translate('ar');
-                              },
+                          selectedDate != null
+                              ? Expanded(
+                                  child: Container(
+                                    height: Const.hi(context)-210,
+                                    padding: EdgeInsets.all(10),
+                                    child: ListView(
+                                      children: [
+                                        for(int y=0; y < tasks[selectedDate!]!.tasks!.length; y++ )
+                                          InkWell(
+                                            onTap:(){
+                                              if(tasks[selectedDate!]!.tasks![y].accessor==true){
+                                                Task _tysk = tasks[selectedDate!]!.tasks![y];
+                                                Navigator.push(context, MaterialPageRoute(builder: (context) => TaskScreen(task: _tysk,))).then((value) => _pullTasks());
+                                              }else{
+                                                Const.toastMessage('Its previous car washes are pending');
+                                              }
+                                            },
+                                            child: Container(
+                                              margin: EdgeInsets.only(bottom: 20),
+                                              padding: EdgeInsets.all(10),
+                                              decoration: BoxDecoration(
+                                                color: Colors.grey.shade100,
+                                                border: Border(
+                                                  bottom: BorderSide(
+                                                    color: Colors.grey.shade500
+                                                  )
+                                                )
+                                              ),
+                                              child: Column(
+                                                crossAxisAlignment: CrossAxisAlignment.start,
+                                                children: [
+
+                                                  Row(
+                                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                    children: [
+                                                      Text('${tasks[selectedDate!]!.tasks![y].order?.car?.make}',style: TextStyle(fontSize: 19,fontWeight: FontWeight.w500),),
+                                                      Container(
+                                                        padding: EdgeInsets.symmetric(vertical: 5,horizontal: 13),
+                                                        decoration: BoxDecoration(
+                                                            color:(tasks[selectedDate!]!.tasks![y].accessor == false) ? Colors.grey.shade200 : (tasks[selectedDate!]!.tasks![y].status==TaskStatus.complete)
+                                                                ? Colors.green.shade100
+                                                                : Colors.blue.shade50,
+                                                            borderRadius: BorderRadius.circular(20)
+                                                        ),
+                                                          child:Text(
+                                                            '${(tasks[selectedDate!]!.tasks![y].accessor == false) ? 'Upcoming' : (tasks[selectedDate!]!.tasks![y].status==TaskStatus.complete)
+                                                                ? 'Completed'
+                                                                : 'Pending'}',
+                                                            style: TextStyle(color: Colors.black),)
+                                                      ),
+
+                                                    ],
+                                                  ),
+                                                  Text(' ${tasks[selectedDate!]!.tasks![y].order?.car?.model} | ${tasks[selectedDate!]!.tasks![y].order?.car?.plate}',style: TextStyle(),),
+                                                  SizedBox(height: 10,),
+                                                  (tasks[selectedDate!]!.tasks![y].order?.car?.image == null)? Container():
+                                                  Stack(
+                                                    children: [
+                                                      InkWell(
+                                                          onTap: (){
+                                                            Navigator.push(context, MaterialPageRoute(builder: (context) => ShowImage('${AppUrl.url}storage/car/${tasks[selectedDate!]!.tasks![y].order?.car?.image}')));
+                                                          },
+                                                          child: Image.network('${AppUrl.url}storage/car/${tasks[selectedDate!]!.tasks![y].order?.car?.image}',width: double.infinity,height: 200,fit: BoxFit.cover,)
+                                                      ),
+                                                      Positioned(
+                                                        right: 10,
+                                                        top: 10,
+                                                        child: Container(
+                                                          padding: EdgeInsets.symmetric(vertical: 7,horizontal: 15),
+                                                          decoration: BoxDecoration(
+                                                              color:Colors.black,
+                                                              borderRadius: BorderRadius.circular(20)
+                                                          ),
+                                                          child:Text('${tasks[selectedDate!]!.tasks![y].order?.subscription?.title}',style: TextStyle(color: Colors.white),),
+                                                        ),
+                                                      )
+
+                                                    ],
+                                                  ),
+                                                  Container(
+                                                    padding: EdgeInsets.only(top: 10),
+                                                    child: Row(
+                                                      crossAxisAlignment: CrossAxisAlignment.center,
+                                                      children: [
+                                                        if(tasks[selectedDate!]!.tasks![y].order?.user?.long != null)
+                                                          InkWell(
+                                                            onTap: ()async{
+                                                              String url = '${tasks[selectedDate!]!.tasks![y].order?.user?.location}';
+                                                              if (await canLaunch(url)) {
+                                                                await launch(url);
+                                                              } else {
+                                                                Const.toastMessage('Something went wrong');
+                                                              }
+                                                            },
+                                                            child: Icon(Icons.pin_drop_outlined),
+                                                          ),
+                                                        SizedBox(width: 10,),
+                                                        Text('${tasks[selectedDate!]!.tasks![y].order?.user?.name} ',style: TextStyle(fontSize: 14,fontWeight: FontWeight.bold),),
+
+                                                      ],
+                                                    ),
+                                                  ),
+
+
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                      ],
+                                    ),
+                                  ),
+                          ) : Container(
+                              child: Text('No Car'),
                             ),
-                          ),
-
-
                         ],
                       ),
-                      const SizedBox(height: 16.0),
-                      ItemWidget(
-                        title: 'Current Language',
-                        content: _localization.getLanguageName(),
-                      ),
-                      ItemWidget(
-                        title: 'Font Family',
-                        content: _localization.fontFamily,
-                      ),
-                      ItemWidget(
-                        title: 'Locale Identifier',
-                        content: _localization.currentLocale.localeIdentifier,
-                      ),
-                      ItemWidget(
-                        title: 'String Format',
-                        content: Strings.format(
-                          'Hello %a, this is me %a.',
-                          ['Dara', 'Sopheak'],
-                        ),
-                      ),
-                      ItemWidget(
-                        title: 'Context Format String',
-                        content: context.formatString(
-                          AppLocale.thisIs,
-                          [AppLocale.title, 'LATEST'],
-                        ),
-                      ),
-                    ],
+                    )
+                else if (_indexViewModel.getStatus.status == Status.BUSY)
+                  Container(
+                    width: Const.wi(context),
+                    height: Const.hi(context)/1.2,
+                    child:   Const.LoadingIndictorWidtet(),
                   ),
-                ),
-              ),
             ],
           ),
         ),
       ),
     );
-
   }
-}
 
 
 
-
-class ItemWidget extends StatelessWidget {
-  const ItemWidget({
-    super.key,
-    required this.title,
-    required this.content,
-  });
-
-  final String? title;
-  final String? content;
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 8.0),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Expanded(child: Text(title ?? '')),
-          const Text(' : '),
-          Expanded(child: Text(content ?? '')),
-        ],
-      ),
-    );
-  }
 }
