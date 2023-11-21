@@ -312,7 +312,7 @@ class _TaskScreenState extends State<TaskScreen> {
                                     ),
 
 
-                                    if(task?.order?.payment == OrderPayment.pending)
+                                    if(task?.order?.payment == OrderPayment.pending && authRole == Role.technician)
                                       Container(
                                         padding: EdgeInsets.all(10),
                                         child: Row(
@@ -438,6 +438,7 @@ class _TaskScreenState extends State<TaskScreen> {
                                       if(task?.order?.payment == OrderPayment.pending)
                                         Container(
                                           margin: EdgeInsets.only(right: 16.0),
+                                          padding: EdgeInsets.symmetric(vertical: 10,horizontal: 25),
                                           child: ElevatedButton(
                                             onPressed: ()async {
                                               await _indexViewModel.markPaymentAsDone({'id':'${task?.order?.id}'});
@@ -446,7 +447,14 @@ class _TaskScreenState extends State<TaskScreen> {
                                             style: ElevatedButton.styleFrom(
                                               primary: Colors.black, // Background color
                                             ),
-                                            child: Text('Mark Order # ${task?.order?.id.toString().padLeft(4, '0')} as Paid', style: TextStyle(color: Colors.white)),
+                                            child: Row(
+                                              mainAxisAlignment: MainAxisAlignment.center,
+                                              children: [
+                                                Text('Mark as paid', style: TextStyle(color: Colors.white)),
+                                                SizedBox(width: 10,),
+                                                Icon(Icons.check_circle,size: 14,),
+                                              ],
+                                            ),
                                           ),
                                       )
                                     ]
