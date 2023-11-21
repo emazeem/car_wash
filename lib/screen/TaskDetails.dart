@@ -414,59 +414,58 @@ class _TaskScreenState extends State<TaskScreen> {
                                     if(task?.inside_wash==1 && task?.outside_wash==1) Text('Inside and Outside Wash',style: TextStyle(color: Colors.green,fontSize: 17),),
                                     if(task?.outside_wash==1 && task?.inside_wash==0) Text('Only Outside Wash',style: TextStyle(color: Colors.green,fontSize: 17),),
                                     if(task?.outside_wash==0 && task?.inside_wash==1) Text('Only Inside Wash',style: TextStyle(color: Colors.green,fontSize: 17),),
-
-
-
                                     SizedBox(height: 20,),
-                                    (task?.status == TaskStatus.pending) ? (authRole ==  Role.technician)
-                                        ? Row(
+                                    if(task?.status == TaskStatus.pending && authRole ==  Role.technician)
+                                        Row(
                                             mainAxisAlignment: imagePath==null ? MainAxisAlignment.end : MainAxisAlignment.spaceBetween,
                                             crossAxisAlignment: CrossAxisAlignment.end,
                                             children: [
-                                              (imagePath!=null && selectedImageType=='task')
-                                                  ? Container(
-                                                width: Const.wi(context) / 5,
-                                                height: Const.wi(context) / 5,
-                                                padding: EdgeInsets.all(10),
-                                                margin: EdgeInsets.only(left: 10),
-                                                decoration: BoxDecoration(
-                                                  border: Border.all(
-                                                    color: Colors.grey, // Color of the dashed border
-                                                    width: 1, // Width of the dashed border
-                                                  ),
-                                                  borderRadius: BorderRadius.circular(8), // Adjust the radius as needed
-                                                  shape: BoxShape.rectangle,
-                                                ),
-                                                child: Image.file(File(imagePath!.path)),
-                                              ): Container(),
-
-                                              (imagePath==null) ? InkWell(
-                                                onTap: (){
-                                                  getImage('gallery');
-                                                  setState(() {
-                                                    selectedImageType='task';
-                                                  });
-                                                },
-                                                child: Container(
-                                                  width: Const.wi(context) / 10,
-                                                  height: Const.wi(context) / 10,
-                                                  margin: EdgeInsets.only(left: 10),
-                                                  decoration: BoxDecoration(
-                                                    border: Border.all(
-                                                      color: Colors.grey, // Color of the dashed border
-                                                      width: 1, // Width of the dashed border
+                                              if(imagePath!=null && selectedImageType=='task')
+                                                  Container(
+                                                    width: Const.wi(context) / 5,
+                                                    height: Const.wi(context) / 5,
+                                                    padding: EdgeInsets.all(10),
+                                                    margin: EdgeInsets.only(left: 10),
+                                                    decoration: BoxDecoration(
+                                                      border: Border.all(
+                                                        color: Colors.grey, // Color of the dashed border
+                                                        width: 1, // Width of the dashed border
+                                                      ),
+                                                      borderRadius: BorderRadius.circular(8), // Adjust the radius as needed
+                                                      shape: BoxShape.rectangle,
                                                     ),
-                                                    borderRadius: BorderRadius.circular(8), // Adjust the radius as needed
-                                                    shape: BoxShape.rectangle,
+                                                    child: Image.file(File(imagePath!.path)),
                                                   ),
-                                                  child: Icon(
-                                                    Icons.image,
-                                                    size: 25,
-                                                    color: Colors.black.withOpacity(0.7),
+
+                                              if(imagePath==null)
+                                                InkWell(
+                                                  onTap: (){
+                                                    getImage('gallery');
+                                                    setState(() {
+                                                      selectedImageType='task';
+                                                    });
+                                                  },
+                                                  child: Container(
+                                                    width: Const.wi(context) / 10,
+                                                    height: Const.wi(context) / 10,
+                                                    margin: EdgeInsets.only(left: 10),
+                                                    decoration: BoxDecoration(
+                                                      border: Border.all(
+                                                        color: Colors.grey, // Color of the dashed border
+                                                        width: 1, // Width of the dashed border
+                                                      ),
+                                                      borderRadius: BorderRadius.circular(8), // Adjust the radius as needed
+                                                      shape: BoxShape.rectangle,
+                                                    ),
+                                                    child: Icon(
+                                                      Icons.image,
+                                                      size: 25,
+                                                      color: Colors.black.withOpacity(0.7),
+                                                    ),
                                                   ),
                                                 ),
-                                              ) : Container(),
-                                              (imagePath==null)  ? InkWell(
+                                              if(imagePath==null)
+                                                InkWell(
                                                 onTap: (){
                                                   getImage('camera');
                                                   setState(() {
@@ -491,56 +490,45 @@ class _TaskScreenState extends State<TaskScreen> {
                                                     color: Colors.black.withOpacity(0.7),
                                                   ),
                                                 ),
-                                              ) : Container(),
-
-
+                                              ),
                                               Container(
                                                 child: Row(
                                                   children: [
-                                                    (imagePath!=null && selectedImageType=='task') ?  Container(
-
+                                                    if(imagePath!=null && selectedImageType=='task')
+                                                      Container(
                                                       padding:EdgeInsets.only(top: 10),
                                                       child: ElevatedButton(
                                                         onPressed: ()async {
-                                                          setState(() {
-                                                            imagePath=null;
-                                                          });
+                                                          setState(() { imagePath=null; });
                                                         },
-                                                        style: ElevatedButton.styleFrom(
-                                                          primary: Colors.grey, // Background color
-                                                        ),
+                                                        style: ElevatedButton.styleFrom( primary: Colors.grey),
                                                         child: Text('Cancel', style: TextStyle(color: Colors.white)),
                                                       ),
-                                                    ) :Container(),
+                                                    ),
                                                     SizedBox(width: 10,),
-                                                    (imagePath!=null && selectedImageType=='task') ?  Container(
-
-                                                      padding:EdgeInsets.only(top: 10),
-                                                      child: ElevatedButton(
-                                                        onPressed: ()async {
-                                                          uploadFile(context,'task',task?.id);
-                                                        },
-                                                        style: ElevatedButton.styleFrom(
-                                                          primary: Colors.black, // Background color
-                                                        ),
-                                                        child: Text('Upload', style: TextStyle(color: Colors.white)),
+                                                    if(imagePath!=null && selectedImageType=='task')
+                                                      Container(
+                                                        padding:EdgeInsets.only(top: 10),
+                                                        child: ElevatedButton(
+                                                            onPressed: ()async {
+                                                              uploadFile(context,'task',task?.id);
+                                                            },
+                                                            style: ElevatedButton.styleFrom(primary: Colors.black,),
+                                                            child: Text('Upload', style: TextStyle(color: Colors.white)),
+                                                          ),
                                                       ),
-                                                    ) :Container(),
                                                   ],
                                                 ),
                                               ),
-
                                             ],
-                                          )
-                                        : Container()
-                                        : Container(),
-
+                                          ),
                                     SizedBox(height: 10,),
-
-                                    (task!.images!.length == 0)
-                                        ? Container(
-                                        child: Text('No Wash Images uploaded',textAlign: TextAlign.center,),
-                                      ) : SingleChildScrollView(
+                                    if(task!.images!.length == 0)
+                                      Container(
+                                        child: Text('No wash image uploaded',textAlign: TextAlign.center,),
+                                      )
+                                    else
+                                      SingleChildScrollView(
                                       scrollDirection: Axis.horizontal,
                                       child: Row(
                                         children:[
@@ -559,41 +547,39 @@ class _TaskScreenState extends State<TaskScreen> {
                                         ],
                                       ),
                                     ),
-
-                                    SizedBox(height: 10,),
-                                    Divider(),
-
-                                    task?.status == TaskStatus.pending && task!.images!.length > 0
-                                        ? (authRole == Role.technician)? Container(
-                                      margin: EdgeInsets.all(10),
-                                      child: ElevatedButton(
-                                        onPressed: ()async {
-                                          await _indexViewModel.taskMarkAsDone({'id':'${task?.id}'});
-                                          _pullTask();
-                                        },
-                                        style: ElevatedButton.styleFrom(
-                                          primary: Colors.black, // Background color
+                                    if(task?.status == TaskStatus.pending && task!.images!.length > 0)...[
+                                      if(authRole == Role.technician)
+                                        Container(
+                                          margin: EdgeInsets.all(10),
+                                          child: ElevatedButton(
+                                            onPressed: ()async {
+                                              await _indexViewModel.taskMarkAsDone({'id':'${task?.id}'});
+                                              _pullTask();
+                                            },
+                                            style: ElevatedButton.styleFrom(
+                                              primary: Colors.black, // Background color
+                                            ),
+                                            child: Row(
+                                              mainAxisAlignment: MainAxisAlignment.center,
+                                              children: [
+                                                Text('Mark as washed', style: TextStyle(color: Colors.white)),
+                                                SizedBox(width: 10,),
+                                                Icon(Icons.check_circle,size: 14,),
+                                              ],
+                                            ),
+                                          ),
                                         ),
-                                        child: Row(
-                                          mainAxisAlignment: MainAxisAlignment.center,
-                                          children: [
-                                            Text('Mark as washed', style: TextStyle(color: Colors.white)),
-                                            SizedBox(width: 10,),
-                                            Icon(Icons.check_circle,size: 14,),
-                                          ],
-                                        ),
-                                      ),
-                                    ): Container()
-                                        : Container(
-                                      margin: EdgeInsets.only(right: 16.0),
-                                      child: ElevatedButton(
-                                        onPressed: (){
-                                        },
-                                        style: ElevatedButton.styleFrom(
-                                          primary: Colors.grey, // Background color
-                                        ),
-                                        child: Text(task!.images!.length==0 ?'Upload images first to mark as washed' :'Marked as Washed' , style: TextStyle(color: Colors.white)),
-                                      ),
+                                    ]
+                                    else Container(
+                                          margin: EdgeInsets.only(right: 16.0),
+                                          child: ElevatedButton(
+                                            onPressed: (){
+                                            },
+                                            style: ElevatedButton.styleFrom(
+                                              primary: Colors.grey, // Background color
+                                            ),
+                                            child: Text(task!.images!.length==0 ?'Upload images first to mark as washed' :'Marked as Washed' , style: TextStyle(color: Colors.white)),
+                                          ),
                                     ),
                                   ],
                                 ),
