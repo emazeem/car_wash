@@ -390,7 +390,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                             if (await canLaunch(url)) {
                                                               await launch(url);
                                                             } else {
-                                                              Const.toastMessage('Something went wrong');
+                                                              Const.toastMessage('Invalid link');
                                                             }
                                                           },
                                                           child: Icon(Icons.pin_drop_outlined),

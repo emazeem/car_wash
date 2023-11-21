@@ -235,7 +235,7 @@ class _TaskScreenState extends State<TaskScreen> {
                                                 if (await canLaunch(url)) {
                                                   await launch(url);
                                                 } else {
-                                                  Const.toastMessage('Something went wrong');
+                                                  Const.toastMessage('Invalid link');
                                                 }
                                               },
                                               child: Container(

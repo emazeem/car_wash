@@ -12,6 +12,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:timeline_list/timeline.dart';
 import 'package:timeline_list/timeline_model.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class CustomerDetail extends StatefulWidget {
   final Customer customer;
@@ -68,10 +69,20 @@ class _CustomerDetailState extends State<CustomerDetail> {
                       SizedBox(height: 5.0),
                       Container(
                         width: Const.wi(context)/2,
-                        child: Text(
-                          'Location: ${widget.customer.location}',
-                          overflow: TextOverflow.fade,
-                          style: TextStyle(fontSize: 16.0),
+                        child: InkWell(
+                          onTap: ()async{
+                            String url = '${widget.customer.location}';
+                            if (await canLaunch(url)) {
+                              await launch(url);
+                            } else {
+                              Const.toastMessage('Invalid link');
+                            }
+                          },
+                          child: Text(
+                            'Location: ${widget.customer.location}',
+                            overflow: TextOverflow.fade,
+                            style: TextStyle(fontSize: 16.0),
+                          ),
                         ),
                       ),
                       SizedBox(height: 5.0),
