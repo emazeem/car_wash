@@ -254,7 +254,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         },
                           child: Icon(Icons.filter_list,size: 25,)
                       ),
-                      selectedDate!=null ? Text('${formatDate(tasks[selectedDate!]!.date)}',style: TextStyle(fontWeight: FontWeight.w500,fontSize: 20),) : Container(),
+                      (selectedDate!=null && tasks.asMap().containsKey(selectedDate)) ? Text('${formatDate(tasks[selectedDate!]!.date)}',style: TextStyle(fontWeight: FontWeight.w500,fontSize: 20),) : Container(),
                     ],
                   ),
                 ),
