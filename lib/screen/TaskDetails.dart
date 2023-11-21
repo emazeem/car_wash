@@ -176,7 +176,7 @@ class _TaskScreenState extends State<TaskScreen> {
                                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                         children: [
                                           Text('Name',style: TextStyle(fontWeight: FontWeight.w500,fontSize: 20),),
-                                          Text('${task?.order?.user?.name}',style: TextStyle(fontWeight: FontWeight.normal,fontSize: 20),),
+                                          Text('${task?.order?.user?.name}',style: TextStyle(fontSize: 20),),
                                         ],
                                       ),
                                     ),
@@ -209,7 +209,7 @@ class _TaskScreenState extends State<TaskScreen> {
                                                   Const.toastMessage('Phone format not correct');
                                                 }
                                               },
-                                              child: Text('${task?.order?.user?.phone}')
+                                              child: Text('${task?.order?.user?.phone}',style: TextStyle(fontSize: 20),)
                                           ),
                                         ],
                                       ),
@@ -238,7 +238,10 @@ class _TaskScreenState extends State<TaskScreen> {
                                                   Const.toastMessage('Something went wrong');
                                                 }
                                               },
-                                              child: Text('${task?.order?.user?.location}',overflow: TextOverflow.fade)
+                                              child: Container(
+                                                width: Const.wi(context)/1.5,
+                                                child:Text('${task?.order?.user?.location}',overflow: TextOverflow.fade,style: TextStyle(fontSize: 20),textAlign: TextAlign.right,)
+                                              )
                                           )
                                         ],
                                       ),
@@ -249,157 +252,204 @@ class _TaskScreenState extends State<TaskScreen> {
                               ),
                             if(selectedTab=='Payment')
                               Container(
+                                padding: EdgeInsets.all(10),
                                 child: Column(
                                   children: [
-                                    Text('Order # ${task?.order?.id.toString().padLeft(4, '0')}'),
-                                    Divider(),
+                                    Container(
+                                      padding:EdgeInsets.symmetric(vertical:10),
+                                      decoration: BoxDecoration(
+                                          border: Border(
+                                              bottom: BorderSide(
+                                                  color: Colors.grey.shade400,
+                                                  width: 0.5
+                                              )
+                                          )
+                                      ),
+                                      child: Row(
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text('Order #',style: TextStyle(fontWeight: FontWeight.w500,fontSize: 20),),
+                                          Text('${task?.order?.id.toString().padLeft(4, '0')}',style: TextStyle(fontSize: 20),),
+                                        ],
+                                      ),
+                                    ),
+                                    Container(
+                                      padding:EdgeInsets.symmetric(vertical:10),
+                                      decoration: BoxDecoration(
+                                          border: Border(
+                                              bottom: BorderSide(
+                                                  color: Colors.grey.shade400,
+                                                  width: 0.5
+                                              )
+                                          )
+                                      ),
+                                      child: Row(
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text('Status',style: TextStyle(fontWeight: FontWeight.w500,fontSize: 20),),
+                                          Text(task?.order?.payment == OrderPayment.pending ? 'Pending' : 'Done',style: TextStyle(fontSize: 20),),
+                                        ],
+                                      ),
+                                    ),
+                                    if(task?.order?.payment == OrderPayment.complete)
+                                    Container(
+                                      padding:EdgeInsets.symmetric(vertical:10),
+                                      decoration: BoxDecoration(
+                                          border: Border(
+                                              bottom: BorderSide(
+                                                  color: Colors.grey.shade400,
+                                                  width: 0.5
+                                              )
+                                          )
+                                      ),
+                                      child: Row(
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text('Payment Date',style: TextStyle(fontWeight: FontWeight.w500,fontSize: 20),),
+                                          Text('${task?.order?.payment_date}',style: TextStyle(fontSize: 20),),
+                                        ],
+                                      ),
+                                    ),
 
-                                    (task?.order?.payment == OrderPayment.pending)?
-                                    Row(
-                                      mainAxisAlignment: imagePath==null ? MainAxisAlignment.end : MainAxisAlignment.spaceBetween,
-                                      crossAxisAlignment: CrossAxisAlignment.end,
-                                      children: [
-                                        (imagePath!=null && selectedImageType=='order')
-                                            ? Container(
-                                          width: Const.wi(context) / 5,
-                                          height: Const.wi(context) / 5,
-                                          padding: EdgeInsets.all(10),
-                                          margin: EdgeInsets.only(left: 10),
-                                          decoration: BoxDecoration(
-                                            border: Border.all(
-                                              color: Colors.grey, // Color of the dashed border
-                                              width: 1, // Width of the dashed border
-                                            ),
-                                            borderRadius: BorderRadius.circular(8), // Adjust the radius as needed
-                                            shape: BoxShape.rectangle,
-                                          ),
-                                          child: Image.file(File(imagePath!.path)),
-                                        ): Container(),
 
-                                        (imagePath==null) ? InkWell(
-                                          onTap: (){
-                                            getImage('gallery');
-                                            setState(() {
-                                              selectedImageType='order';
-                                            });
-                                          },
-                                          child: Container(
-                                            width: Const.wi(context) / 10,
-                                            height: Const.wi(context) / 10,
-                                            margin: EdgeInsets.only(left: 10),
-                                            decoration: BoxDecoration(
-                                              border: Border.all(
-                                                color: Colors.grey, // Color of the dashed border
-                                                width: 1, // Width of the dashed border
+                                    if(task?.order?.payment == OrderPayment.pending)
+                                      Container(
+                                        padding: EdgeInsets.all(10),
+                                        child: Row(
+                                          mainAxisAlignment: imagePath==null ? MainAxisAlignment.end : MainAxisAlignment.spaceBetween,
+                                          crossAxisAlignment: CrossAxisAlignment.end,
+                                          children: [
+                                            if(imagePath!=null && selectedImageType=='order')
+                                              Container(
+                                                width: Const.wi(context) / 5,
+                                                height: Const.wi(context) / 5,
+                                                padding: EdgeInsets.all(10),
+                                                margin: EdgeInsets.only(left: 10),
+                                                decoration: BoxDecoration(
+                                                  border: Border.all(color: Colors.grey, width: 1),
+                                                  borderRadius: BorderRadius.circular(8),
+                                                  shape: BoxShape.rectangle,
+                                                ),
+                                                child: Image.file(File(imagePath!.path)),
                                               ),
-                                              borderRadius: BorderRadius.circular(8), // Adjust the radius as needed
-                                              shape: BoxShape.rectangle,
-                                            ),
-                                            child: Icon(
-                                              Icons.image,
-                                              size: 25,
-                                              color: Colors.black.withOpacity(0.7),
-                                            ),
-                                          ),
-                                        ) : Container(),
-                                        (imagePath==null)  ? InkWell(
-                                          onTap: (){
-                                            getImage('camera');
-                                            setState(() {
-                                              selectedImageType='order';
-                                            });
-                                          },
-                                          child: Container(
-                                            width: Const.wi(context) / 10,
-                                            height: Const.wi(context) / 10,
-                                            margin: EdgeInsets.only(left: 10),
-                                            decoration: BoxDecoration(
-                                              border: Border.all(
-                                                color: Colors.grey, // Color of the dashed border
-                                                width: 1, // Width of the dashed border
+                                            if(imagePath==null)
+                                              InkWell(
+                                                onTap: (){
+                                                  getImage('gallery');
+                                                  setState(() {
+                                                    selectedImageType='order';
+                                                  });
+                                                },
+                                                child: Container(
+                                                  width: Const.wi(context) / 10,
+                                                  height: Const.wi(context) / 10,
+                                                  margin: EdgeInsets.only(left: 10),
+                                                  decoration: BoxDecoration(
+                                                    border: Border.all(
+                                                      color: Colors.grey, // Color of the dashed border
+                                                      width: 1, // Width of the dashed border
+                                                    ),
+                                                    borderRadius: BorderRadius.circular(8), // Adjust the radius as needed
+                                                    shape: BoxShape.rectangle,
+                                                  ),
+                                                  child: Icon(
+                                                    Icons.image,
+                                                    size: 25,
+                                                    color: Colors.black.withOpacity(0.7),
+                                                  ),
+                                                ),
                                               ),
-                                              borderRadius: BorderRadius.circular(8), // Adjust the radius as needed
-                                              shape: BoxShape.rectangle,
-                                            ),
-                                            child: Icon(
-                                              Icons.camera_alt,
-                                              size: 25,
-                                              color: Colors.black.withOpacity(0.7),
-                                            ),
-                                          ),
-                                        ) : Container(),
+                                            if(imagePath==null)
+                                              InkWell(
+                                                onTap: (){
+                                                  getImage('camera');
+                                                  setState(() {
+                                                    selectedImageType='order';
+                                                  });
+                                                },
+                                                child: Container(
+                                                  width: Const.wi(context) / 10,
+                                                  height: Const.wi(context) / 10,
+                                                  margin: EdgeInsets.only(left: 10),
+                                                  decoration: BoxDecoration(
+                                                    border: Border.all(
+                                                      color: Colors.grey, // Color of the dashed border
+                                                      width: 1, // Width of the dashed border
+                                                    ),
+                                                    borderRadius: BorderRadius.circular(8), // Adjust the radius as needed
+                                                    shape: BoxShape.rectangle,
+                                                  ),
+                                                  child: Icon(
+                                                    Icons.camera_alt,
+                                                    size: 25,
+                                                    color: Colors.black.withOpacity(0.7),
+                                                  ),
+                                                ),
+                                              ),
+                                            Row(
+                                              children: [
+                                                if(imagePath!=null && selectedImageType=='order')
+                                                  Container(
+                                                    padding:EdgeInsets.only(top: 10),
+                                                    child: ElevatedButton(
+                                                      onPressed: ()async {
+                                                        setState(() {
+                                                          imagePath=null;
+                                                        });
+                                                      },
+                                                      style: ElevatedButton.styleFrom(
+                                                        primary: Colors.grey, // Background color
+                                                      ),
+                                                      child: Text('Cancel', style: TextStyle(color: Colors.white)),
+                                                    ),
+                                                  ),
+                                                if(imagePath!=null && selectedImageType=='order')
+                                                  Container(
+                                                    padding:EdgeInsets.only(top: 10),
+                                                    margin: EdgeInsets.only(left: 10),
+                                                    child: ElevatedButton(
+                                                      onPressed: ()async {
+                                                        uploadFile(context,'receipt',task?.order?.id);
+                                                      },
+                                                      style: ElevatedButton.styleFrom(
+                                                        primary: Colors.black, // Background color
+                                                      ),
+                                                      child: Text('Upload', style: TextStyle(color: Colors.white)),
+                                                    ),
+                                                  ),
+                                              ],
+                                            )
+                                          ],
+                                        ),
+                                      ),
 
+                                    if(task?.order?.receipt != null)
+                                      Container(
+                                        padding: EdgeInsets.all(10),
+                                        child: Image.network(
+                                          Const.getReceiptPath(task?.order?.receipt),width: Const.wi(context)/3,
+                                          errorBuilder: (context, error, stackTrace) {
+                                            return Container();
+                                          },
+                                        )
+                                      ),
 
-                                        (imagePath!=null && selectedImageType=='order') ? Container(
-                                          padding:EdgeInsets.only(top: 10),
+                                    if(task?.order?.receipt!=null )...[
+                                      if(task?.order?.payment == OrderPayment.pending)
+                                        Container(
+                                          margin: EdgeInsets.only(right: 16.0),
                                           child: ElevatedButton(
                                             onPressed: ()async {
-                                              setState(() {
-                                                imagePath=null;
-                                              });
-                                            },
-                                            style: ElevatedButton.styleFrom(
-                                              primary: Colors.grey, // Background color
-                                            ),
-                                            child: Text('Cancel', style: TextStyle(color: Colors.white)),
-                                          ),
-                                        ) :Container(),
-                                        (imagePath!=null && selectedImageType=='order') ?  Container(
-                                          padding:EdgeInsets.only(top: 10),
-                                          child: ElevatedButton(
-                                            onPressed: ()async {
-                                              uploadFile(context,'receipt',task?.order?.id);
+                                              await _indexViewModel.markPaymentAsDone({'id':'${task?.order?.id}'});
+                                              _pullTask();
                                             },
                                             style: ElevatedButton.styleFrom(
                                               primary: Colors.black, // Background color
                                             ),
-                                            child: Text('Upload', style: TextStyle(color: Colors.white)),
+                                            child: Text('Mark Order # ${task?.order?.id.toString().padLeft(4, '0')} as Paid', style: TextStyle(color: Colors.white)),
                                           ),
-                                        ): Container() ,
-
-
-                                      ],
-                                    ) : Container(),
-
-                                    (task?.order?.receipt == null)
-                                        ? Container()
-                                        : Image.network(
-                                      Const.getReceiptPath(task?.order?.receipt),width: Const.wi(context)/3,
-                                      errorBuilder: (context, error, stackTrace) {
-                                        return Container();
-                                      },
-                                    ),
-
-
-
-
-
-                                    if(task?.order?.receipt!=null )
-                                      (task?.order?.payment == OrderPayment.pending)
-                                          ? Container(
-                                        margin: EdgeInsets.only(right: 16.0),
-                                        child: ElevatedButton(
-                                          onPressed: ()async {
-                                            await _indexViewModel.markPaymentAsDone({'id':'${task?.order?.id}'});
-                                            _pullTask();
-                                          },
-                                          style: ElevatedButton.styleFrom(
-                                            primary: Colors.black, // Background color
-                                          ),
-                                          child: Text('Mark Order # ${task?.order?.id.toString().padLeft(4, '0')} as Paid', style: TextStyle(color: Colors.white)),
-                                        ),
                                       )
-                                          : Container(
-                                        margin: EdgeInsets.only(right: 16.0),
-                                        child: ElevatedButton(
-                                          onPressed: (){
-                                          },
-                                          style: ElevatedButton.styleFrom(
-                                            primary: Colors.grey, // Background color
-                                          ),
-                                          child: Text('Order was marked as paid on ${task?.order?.payment_date}', style: TextStyle(color: Colors.white)),
-                                        ),
-                                      ),
+                                    ]
                                   ],
                                 ),
                               ),
@@ -407,13 +457,14 @@ class _TaskScreenState extends State<TaskScreen> {
                             if(selectedTab=='Wash Status')
                               Container(
                                 padding:EdgeInsets.all(10),
+                                width: double.infinity,
                                 child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.start,
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    if(task?.inside_wash==1 && task?.outside_wash==1) Text('Inside and Outside Wash',style: TextStyle(color: Colors.green,fontSize: 17),),
-                                    if(task?.outside_wash==1 && task?.inside_wash==0) Text('Only Outside Wash',style: TextStyle(color: Colors.green,fontSize: 17),),
-                                    if(task?.outside_wash==0 && task?.inside_wash==1) Text('Only Inside Wash',style: TextStyle(color: Colors.green,fontSize: 17),),
-                                    SizedBox(height: 20,),
+                                    if(task?.inside_wash==1 && task?.outside_wash==1) Text('Inside and Outside Wash',style: TextStyle(color: Colors.green,fontSize: 17),textAlign: TextAlign.left,),
+                                    if(task?.outside_wash==1 && task?.inside_wash==0) Text('Only Outside Wash',style: TextStyle(color: Colors.green,fontSize: 17),textAlign: TextAlign.left,),
+                                    if(task?.outside_wash==0 && task?.inside_wash==1) Text('Only Inside Wash',style: TextStyle(color: Colors.green,fontSize: 17),textAlign: TextAlign.left,),
                                     if(task?.status == TaskStatus.pending && authRole ==  Role.technician)
                                         Row(
                                             mainAxisAlignment: imagePath==null ? MainAxisAlignment.end : MainAxisAlignment.spaceBetween,
@@ -435,7 +486,6 @@ class _TaskScreenState extends State<TaskScreen> {
                                                     ),
                                                     child: Image.file(File(imagePath!.path)),
                                                   ),
-
                                               if(imagePath==null)
                                                 InkWell(
                                                   onTap: (){
@@ -504,7 +554,7 @@ class _TaskScreenState extends State<TaskScreen> {
                                                         child: Text('Cancel', style: TextStyle(color: Colors.white)),
                                                       ),
                                                     ),
-                                                    SizedBox(width: 10,),
+                                                      SizedBox(width: 10,),
                                                     if(imagePath!=null && selectedImageType=='task')
                                                       Container(
                                                         padding:EdgeInsets.only(top: 10),
@@ -524,7 +574,15 @@ class _TaskScreenState extends State<TaskScreen> {
                                     SizedBox(height: 10,),
                                     if(task!.images!.length == 0)
                                       Container(
-                                        child: Text('No wash image uploaded',textAlign: TextAlign.center,),
+                                        width: Const.wi(context),
+                                        margin: EdgeInsets.only(top: 20),
+                                        child: Column(
+                                          mainAxisAlignment: MainAxisAlignment.center,
+                                          children: [
+                                            Icon(Icons.broken_image,size: 100,color: Colors.grey,),
+                                            Text('No wash image uploaded',textAlign: TextAlign.center,style: TextStyle(color: Colors.grey,fontSize: 20),),
+                                          ],
+                                        ),
                                       )
                                     else
                                       SingleChildScrollView(
@@ -535,11 +593,12 @@ class _TaskScreenState extends State<TaskScreen> {
                                             Container(
                                               width: Const.wi(context)/3,
                                               height: Const.wi(context)/3,
+                                              padding: EdgeInsets.all(5),
                                               child: InkWell(
                                                   onTap: (){
                                                     Navigator.push(context, MaterialPageRoute(builder: (context) => ShowImage('${task!.images![f]}')));
                                                   },
-                                                  child: Image.network('${task!.images![f]}')
+                                                  child: Image.network('${task!.images![f]}',fit: BoxFit.cover,)
                                               ),
                                               //child: Text('${task!.images![f]}'),
                                             ),
@@ -569,17 +628,6 @@ class _TaskScreenState extends State<TaskScreen> {
                                           ),
                                         ),
                                     ]
-                                    else Container(
-                                          margin: EdgeInsets.only(right: 16.0),
-                                          child: ElevatedButton(
-                                            onPressed: (){
-                                            },
-                                            style: ElevatedButton.styleFrom(
-                                              primary: Colors.grey, // Background color
-                                            ),
-                                            child: Text(task!.images!.length==0 ?'Upload images first to mark as washed' :'Marked as Washed' , style: TextStyle(color: Colors.white)),
-                                          ),
-                                    ),
                                   ],
                                 ),
                               ),
