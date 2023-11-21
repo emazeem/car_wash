@@ -409,6 +409,8 @@ class _CreateCarState extends State<CreateCar> {
                       Const.toastMessage('Plate no. is required.');
                     } else if (selectedSubscription==0) {
                       Const.toastMessage('Subscription is required to be selected.');
+                    } else if (imagePath==null) {
+                      Const.toastMessage('Upload car image.');
                     } else {
                       if(!_isLoading){
                         setState(() { _isLoading=true; });
