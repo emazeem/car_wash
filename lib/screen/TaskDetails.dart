@@ -410,7 +410,6 @@ class _TaskScreenState extends State<TaskScreen> {
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-
                                     if(task?.inside_wash==1 && task?.outside_wash==1) Text('Inside and Outside Wash',style: TextStyle(color: Colors.green,fontSize: 17),),
                                     if(task?.outside_wash==1 && task?.inside_wash==0) Text('Only Outside Wash',style: TextStyle(color: Colors.green,fontSize: 17),),
                                     if(task?.outside_wash==0 && task?.inside_wash==1) Text('Only Inside Wash',style: TextStyle(color: Colors.green,fontSize: 17),),
