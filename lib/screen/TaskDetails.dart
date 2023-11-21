@@ -144,6 +144,7 @@ class _TaskScreenState extends State<TaskScreen> {
                                         decoration:BoxDecoration(
                                             border: Border(
                                                 bottom: BorderSide(
+                                                  width: selectedTab==tabs[b]? 3 : 1,
                                                   color: selectedTab==tabs[b]?Colors.black:Colors.grey,
                                                 )
                                             )
