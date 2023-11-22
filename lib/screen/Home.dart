@@ -16,8 +16,11 @@ import 'package:carwash/viewmodel/IndexViewModel.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localization/flutter_localization.dart';
 import 'package:intl/intl.dart';
+import 'package:pay/pay.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:carwash/payment_configurations.dart';
+
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -55,6 +58,10 @@ class _HomeScreenState extends State<HomeScreen> {
     String desiredFormat = "dd MMM";
     return DateFormat(desiredFormat).format(dateTime);
   }
+  void onApplePayResult(paymentResult) {
+    print('paymentResult ${paymentResult}');
+  }
+
 
 
   bool showSideBar=false;
@@ -111,13 +118,14 @@ class _HomeScreenState extends State<HomeScreen> {
                          scrollDirection: Axis.vertical,
                          child: Container(
                            width: Const.wi(context),
-                           height: Const.hi(context)-200,
+                           height: Const.hi(context)-250,
+                           padding: EdgeInsets.symmetric(horizontal: 5),
                            child:  GridView(
                              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                                crossAxisCount: 2,
                                crossAxisSpacing: 5,
                                mainAxisSpacing: 5,
-                               childAspectRatio: MediaQuery.of(context).size.width / (MediaQuery.of(context).size.height-130),
+                               childAspectRatio: MediaQuery.of(context).size.width / (MediaQuery.of(context).size.height-155),
                              ),
                              children: [
                                for(int x=0;x<cars.length;x++)
@@ -189,20 +197,41 @@ class _HomeScreenState extends State<HomeScreen> {
                                                    Icon(Icons.refresh,size: 14,),
                                                ],
                                              ),
+                                             SizedBox(height: 10,),
                                              Row(
                                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                                children: [
-                                                 ElevatedButton(
-                                                   onPressed: ()async {
+                                                 InkWell(
+                                                   onTap: (){
                                                      Navigator.push(context, MaterialPageRoute(builder: (context) => CustomerDetail(customer: cars[x]!.customer!,carId:  cars[x]!.id,))).then((value) => _pullMyCars());
                                                    },
-                                                   style: ElevatedButton.styleFrom(
-                                                     primary: Colors.black, // Background color
+                                                   child: Container(
+                                                     decoration: BoxDecoration(
+                                                         color: Colors.black,
+                                                       borderRadius: BorderRadius.circular(5)
+                                                     ),
+                                                     padding: EdgeInsets.symmetric(vertical: 6,horizontal: 13),
+                                                     child: Text('Details', style: TextStyle(color: Colors.white,fontSize: 15,fontWeight: FontWeight.w500)),
                                                    ),
-                                                   child: Text('Details', style: TextStyle(color: Colors.white)),
                                                  ),
                                                  if(cars[x]?.order?.payment == OrderPayment.pending)
-                                                   ElevatedButton(
+                                                   ApplePayButton(
+                                                     paymentConfiguration: PaymentConfiguration.fromJsonString(defaultApplePay),
+                                                     paymentItems: [
+                                                       PaymentItem(
+                                                         label: 'Total',
+                                                         amount: '${cars[x]?.order?.price}',
+                                                         status: PaymentItemStatus.final_price,
+                                                       )
+                                                     ],
+                                                     style: ApplePayButtonStyle.black,
+                                                     type: ApplePayButtonType.checkout,
+                                                     onPaymentResult: onApplePayResult,
+                                                     loadingIndicator: const Center(
+                                                       child: CircularProgressIndicator(),
+                                                     ),
+                                                   ),
+                                                   /*ElevatedButton(
                                                      onPressed: ()async {
                                                        Navigator.push(context, MaterialPageRoute(builder: (context) => PaymentPage(car: cars[x],))).then((value) => _pullMyCars());
 
@@ -211,7 +240,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                        primary: Colors.black, // Background color
                                                      ),
                                                      child: Text('Pay Now', style: TextStyle(color: Colors.white)),
-                                                   ),
+                                                   ),*/
 
                                                ],
                                              ),

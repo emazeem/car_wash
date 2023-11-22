@@ -632,6 +632,7 @@ class IndexViewModel extends ChangeNotifier {
     }
   }
   Future editUser(dynamic data) async {
+    print('object');
     String authToken= await ShPref.getAuthToken();
     try{
       dynamic response = await _apiServices.getPostAuthApiResponse(AppUrl.editUser, data,authToken);

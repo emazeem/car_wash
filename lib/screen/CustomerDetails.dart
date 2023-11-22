@@ -35,6 +35,7 @@ class _CustomerDetailState extends State<CustomerDetail> {
     }
     print('length of cars ${lengthOfCars}');
   }
+  int? selectedTech;
 
   List<Car?> cars=[];
   List<bool> showCarsBool=[];
@@ -44,11 +45,15 @@ class _CustomerDetailState extends State<CustomerDetail> {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
       Provider.of<IndexViewModel>(context, listen: false).setCars([]);
       await _pullCars();
-
+      await _pullTechList();
+      selectedTech=widget.customer.group_id;
     });
     super.initState();
   }
-
+  Future<void> _pullTechList() async {
+    Provider.of<IndexViewModel>(context, listen: false).setTechniciansList([]);
+    await Provider.of<IndexViewModel>(context, listen: false).fetchTechniciansList({});
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -98,6 +103,20 @@ class _CustomerDetailState extends State<CustomerDetail> {
                       Text(
                         'Phone: ${widget.customer.phone}',
                         style: TextStyle(fontSize: 16.0),
+                      ),
+                      InkWell(
+                        onTap: () {
+                          _showTechniciansBottomSheet(context,_indexViewModel.getTechniciansList,_indexViewModel);
+                        },
+                        child: Container(
+                          width: Const.wi(context)/2,
+                          padding: EdgeInsets.symmetric(vertical: 10,horizontal: 10),
+                          decoration: BoxDecoration(
+                              border: Border.all(color: Colors.grey),
+                              borderRadius: BorderRadius.circular(5)
+                          ),
+                          child: Text(selectedTech!=null ? '${_indexViewModel.getTechniciansList.where((element) => element?.id == selectedTech ).first?.name}' : 'Assign to Technician',style: TextStyle(color: Colors.black87),),
+                        ),
                       ),
 
                     ],
@@ -349,4 +368,83 @@ class _CustomerDetailState extends State<CustomerDetail> {
       ),
     );
   }
+  void _showTechniciansBottomSheet(BuildContext context,List<Customer?> tech_list,IndexViewModel _indexViewModel) {
+    showModalBottomSheet(
+      context: context,
+      builder: (BuildContext context) {
+        return StatefulBuilder(
+          builder: (BuildContext context, StateSetter setState) {
+            return Container(
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: ListView(
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text('Assign Customer to Technician',style: TextStyle(fontSize: 20),),
+                        InkWell(
+                          onTap: () {
+                            Navigator.pop(context);
+                          },
+                          child: Icon(Icons.close),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 10,),
+
+                    for (int x = 0; x < tech_list.length; x++)
+                      InkWell(
+                        onTap: () async{
+                          setState((){
+                            selectedTech = tech_list[x]?.id;
+                          });
+                          Map<String, dynamic> data = {
+                            'user_id':widget.customer.id.toString(),
+                            'email':widget.customer.email,
+                            'name': widget.customer.name,
+                            'phone': widget.customer.phone,
+                            'address': widget.customer.address,
+                            'group_id': selectedTech.toString(),
+                          };
+                          try{
+                            Map response=await _indexViewModel.editUser(data);
+                            print(response);
+                          }catch(e){
+                          }
+                          Navigator.pop(context);
+                        },
+                        child: Container(
+                          width: double.infinity,
+                          padding: EdgeInsets.all(10),
+                          color: selectedTech == tech_list[x]?.id
+                              ? Colors.black
+                              : Colors.grey.shade200,
+                          margin: EdgeInsets.only(top: 2, bottom: 2),
+                          child: Text(
+                            '${tech_list[x]?.name}',
+                            style: TextStyle(
+                              color: selectedTech == tech_list[x]?.id
+                                  ? Colors.white
+                                  : Colors.black,
+                            ),
+                          ),
+                        ),
+                      ),
+                    SizedBox(height: 16),
+                  ],
+                ),
+              ),
+            );
+          },
+        );
+      },
+    ).then((value)async {
+      setState(() {
+        selectedTech=selectedTech;
+      });
+
+    });
+  }
+
 }

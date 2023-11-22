@@ -71,6 +71,7 @@ class _PaymentPageState extends State<PaymentPage> {
 
 
   void onApplePayResult(paymentResult) {
+    print('paymentResult ${paymentResult}');
   }
 
 
@@ -92,139 +93,130 @@ class _PaymentPageState extends State<PaymentPage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
 
-              Text('Order # ${widget.car?.order?.id.toString().padLeft(4, '0')}',style: TextStyle(fontSize: 20),),
-              Divider(),
-              Text('Payment of Order # ${widget.car?.order?.id.toString().padLeft(4, '0')} against '
-                  '${widget.car?.make} , ${widget.car?.model} # ${widget.car?.plate}.',style: TextStyle(fontSize: 16),),
+              Visibility(
+                visible: false,
+                child: Column(
+                  children: [
+                    Text('Order # ${widget.car?.order?.id.toString().padLeft(4, '0')}',style: TextStyle(fontSize: 20),),
+                    Divider(),
+                    Text('Payment of Order # ${widget.car?.order?.id.toString().padLeft(4, '0')} against '
+                        '${widget.car?.make} , ${widget.car?.model} # ${widget.car?.plate}.',style: TextStyle(fontSize: 16),),
 
-              Padding(
-                padding: EdgeInsets.symmetric(vertical: 10),
-                child: TextField(
-                  controller: _nameController,
-                  decoration: InputDecoration(
-                    labelText: 'Name',
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                  ),
-                ),
-              ),
-              Padding(
-                padding: EdgeInsets.only(top: 10),
-                child: TextField(
-                  controller: _cardNumberController,
-                  keyboardType: TextInputType.number,
-                  maxLength: 16,
-                  decoration: InputDecoration(
-                    labelText: 'Card Number (16 digits)',
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                  ),
-                ),
-              ),
-              Row(
-                children: [
-                  Expanded(
-                    child: TextField(
-                      controller: _expiryMonthController,
-                      keyboardType: TextInputType.number,
-                      maxLength: 2,
-                      decoration: InputDecoration(
-                        labelText: 'Expiry Month',
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
+                    Padding(
+                      padding: EdgeInsets.symmetric(vertical: 10),
+                      child: TextField(
+                        controller: _nameController,
+                        decoration: InputDecoration(
+                          labelText: 'Name',
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                  SizedBox(width: 10),
-                  Expanded(
-                    child: TextField(
-                      controller: _expiryYearController,
-                      keyboardType: TextInputType.number,
-                      maxLength: 2,
-                      decoration: InputDecoration(
-                        labelText: 'Expiry Year',
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
+                    Padding(
+                      padding: EdgeInsets.only(top: 10),
+                      child: TextField(
+                        controller: _cardNumberController,
+                        keyboardType: TextInputType.number,
+                        maxLength: 16,
+                        decoration: InputDecoration(
+                          labelText: 'Card Number (16 digits)',
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                ],
-              ),
-              Padding(
-                padding: EdgeInsets.symmetric(vertical: 10),
-                child: TextField(
-                  controller: _cvvController,
-                  keyboardType: TextInputType.number,
-                  maxLength: 4,
-                  decoration: InputDecoration(
-                    labelText: 'CVV',
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: TextField(
+                            controller: _expiryMonthController,
+                            keyboardType: TextInputType.number,
+                            maxLength: 2,
+                            decoration: InputDecoration(
+                              labelText: 'Expiry Month',
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                            ),
+                          ),
+                        ),
+                        SizedBox(width: 10),
+                        Expanded(
+                          child: TextField(
+                            controller: _expiryYearController,
+                            keyboardType: TextInputType.number,
+                            maxLength: 2,
+                            decoration: InputDecoration(
+                              labelText: 'Expiry Year',
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
-                  ),
-                ),
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-
-                  ElevatedButton(
-                    onPressed: () async{
-                      if(!_loading){
-                        if(_nameController.text.isEmpty){
-                          Const.toastMessage('Name is required!');
-                        }else
-                        if(_cardNumberController.text.isEmpty){
-                          Const.toastMessage('Card number is required!');
-                        }else
-                        if(_expiryMonthController.text.isEmpty){
-                          Const.toastMessage('Expiry month is required!');
-                        }else
-                        if(_expiryMonthController.text.isEmpty){
-                          Const.toastMessage('Expiry year is required!');
-                        }else
-                        if(_expiryMonthController.text.isEmpty){
-                          Const.toastMessage('CVV is required!');
-                        }else{
-                          await checkout();
-                        }
-                      }
-                    },
-                    style: ElevatedButton.styleFrom(
-                      primary: Const.primaryColor, // Change to your desired button color
-                      onPrimary: Colors.white,
-                      textStyle: TextStyle(color: Colors.black, fontSize: 22),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(5),
+                    Padding(
+                      padding: EdgeInsets.symmetric(vertical: 10),
+                      child: TextField(
+                        controller: _cvvController,
+                        keyboardType: TextInputType.number,
+                        maxLength: 4,
+                        decoration: InputDecoration(
+                          labelText: 'CVV',
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                        ),
                       ),
                     ),
-                    child: Text(_loading?'Processing..':'Pay ${widget.car?.order?.price} SAR'),
-                  ),
-                ],
-              ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
 
-
-              ApplePayButton(
-                paymentConfiguration: PaymentConfiguration.fromJsonString(defaultApplePay),
-                paymentItems: [
-                  PaymentItem(
-                    label: 'Total',
-                    amount: '${widget.car?.order?.price}',
-                    status: PaymentItemStatus.final_price,
-                  )
-                ],
-                style: ApplePayButtonStyle.black,
-                type: ApplePayButtonType.buy,
-                margin: const EdgeInsets.only(top: 15.0),
-                onPaymentResult: onApplePayResult,
-                loadingIndicator: const Center(
-                  child: CircularProgressIndicator(),
+                        ElevatedButton(
+                          onPressed: () async{
+                            if(!_loading){
+                              if(_nameController.text.isEmpty){
+                                Const.toastMessage('Name is required!');
+                              }else
+                              if(_cardNumberController.text.isEmpty){
+                                Const.toastMessage('Card number is required!');
+                              }else
+                              if(_expiryMonthController.text.isEmpty){
+                                Const.toastMessage('Expiry month is required!');
+                              }else
+                              if(_expiryMonthController.text.isEmpty){
+                                Const.toastMessage('Expiry year is required!');
+                              }else
+                              if(_expiryMonthController.text.isEmpty){
+                                Const.toastMessage('CVV is required!');
+                              }else{
+                                await checkout();
+                              }
+                            }
+                          },
+                          style: ElevatedButton.styleFrom(
+                            primary: Const.primaryColor, // Change to your desired button color
+                            onPrimary: Colors.white,
+                            textStyle: TextStyle(color: Colors.black, fontSize: 22),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(5),
+                            ),
+                          ),
+                          child: Text(_loading?'Processing..':'Pay ${widget.car?.order?.price} SAR'),
+                        ),
+                      ],
+                    ),
+                  ],
                 ),
               ),
+
+
+
 
 
             ],
