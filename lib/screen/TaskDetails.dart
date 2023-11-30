@@ -26,7 +26,9 @@ class TaskScreen extends StatefulWidget {
 
 class _TaskScreenState extends State<TaskScreen> {
 
-  
+  List<String> orderTypeList=['Transfer','Mada','Cash','Online Payment'];
+
+  String selectedOrderType='';
   Task? task;
   Future<void> _pullTask() async {
     Provider.of<IndexViewModel>(this.context, listen: false).setTask(Task());
@@ -292,6 +294,23 @@ class _TaskScreenState extends State<TaskScreen> {
                                         ],
                                       ),
                                     ),
+                                    if(task?.order?.payment == OrderPayment.pending)
+                                      Row(
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text('Payment Type',style: TextStyle(fontWeight: FontWeight.w500,fontSize: 20),),
+
+                                          InkWell(
+                                            onTap: () {
+                                              _updateOrderTypeBottomSheet(context,orderTypeList,task?.order?.id,_indexViewModel);
+                                            },
+                                            child: Container(
+                                              padding: EdgeInsets.symmetric(vertical: 10,horizontal: 10),
+                                              child: Text(task?.order?.type!=null ? '${task?.order?.type}' : 'Select Type of Payment',style: TextStyle(color: Colors.black87,fontSize: 20),),
+                                            ),
+                                          )
+                                        ],
+                                      ),
                                     if(task?.order?.payment == OrderPayment.complete)
                                     Container(
                                       padding:EdgeInsets.symmetric(vertical:10),
@@ -661,6 +680,79 @@ class _TaskScreenState extends State<TaskScreen> {
 
   }
 
+  void _updateOrderTypeBottomSheet(BuildContext context,List<String> orderTypeList,int? id,IndexViewModel _indexViewModel) {
+    showModalBottomSheet(
+      context: context,
+      builder: (BuildContext context) {
+        return StatefulBuilder(
+          builder: (BuildContext context, StateSetter setState) {
+            return Container(
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: ListView(
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text('Assign Order Type',style: TextStyle(fontSize: 20),),
+                        InkWell(
+                          onTap: () {
+                            Navigator.pop(context);
+                          },
+                          child: Icon(Icons.close),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 10,),
+
+                    for (int x = 0; x < orderTypeList.length; x++)
+                      InkWell(
+                        onTap: () async{
+                          setState((){
+                            selectedOrderType = orderTypeList[x];
+                          });
+                          Map<String, dynamic> data = {
+                            'id':id.toString(),
+                            'type': selectedOrderType.toString(),
+                          };
+                          try{
+                            Map response=await _indexViewModel.updateOrderType(data);
+                            print(response);
+                          }catch(e){
+                          }
+                          Navigator.pop(context);
+                        },
+                        child: Container(
+                          width: double.infinity,
+                          padding: EdgeInsets.all(10),
+                          color: selectedOrderType == orderTypeList[x]
+                              ? Colors.black
+                              : Colors.grey.shade200,
+                          margin: EdgeInsets.only(top: 2, bottom: 2),
+                          child: Text(
+                            '${orderTypeList[x]}',
+                            style: TextStyle(
+                              color:Colors.orange,
+                            ),
+                          ),
+                        ),
+                      ),
+                    SizedBox(height: 16),
+                  ],
+                ),
+              ),
+            );
+          },
+        );
+      },
+    ).then((value)async {
+      await _indexViewModel.fetchTask({'id': widget.task?.id.toString()});
+      setState(() {
+        selectedOrderType=selectedOrderType;
+      });
+
+    });
+  }
 
 
 

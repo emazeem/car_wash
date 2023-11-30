@@ -386,13 +386,12 @@ class IndexViewModel extends ChangeNotifier {
         });
         item['order']['tasks']=_tasks;
         item['order']['subscription']=Subscription.fromJson(item['order']['subscription']);
+        print('-------------${item['order']}');
         item['order']=Order.fromJson(item['order']);
         Car car=Car.fromJson(item);
         sub.add(car);
       });
-      print('object');
-      print(data['car_id']);
-      print(data['car_id'] == 'null');
+
       if(data['car_id'] != 'null'){
         sub = sub.where((car) => car?.id.toString() == data['car_id']).toList();
       }
@@ -643,6 +642,17 @@ class IndexViewModel extends ChangeNotifier {
       Const.toastMessage(e.toString());
     }
   }
+  Future updateOrderType(dynamic data) async {
+    String authToken= await ShPref.getAuthToken();
+    try{
+      dynamic response = await _apiServices.getPostAuthApiResponse(AppUrl.updateOrderType, data,authToken);
+      Const.toastMessage(response['message']);
+      return response;
+    }catch(e){
+      Const.toastMessage(e.toString());
+    }
+  }
+
   Future createExpense(Map<String, dynamic> data) async {
     String authToken= await ShPref.getAuthToken();
     try{

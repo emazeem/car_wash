@@ -14,6 +14,7 @@ class AppUrl {
   static var fetchUser= baseUrl + 'fetchUser';
   static var fetch4sundays= baseUrl + 'fetch4sundays';
   static var editUser= baseUrl + 'editUser';
+  static var updateOrderType= baseUrl + 'updateOrderType';
   static var createExpense= baseUrl + 'createExpense';
   static var fetchTasks= baseUrl + 'fetchTasks';
   static var fetchMyCars= baseUrl + 'fetchMyCars';

@@ -183,8 +183,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                         ),
                                        SizedBox(height: 10,),
                                        Container(
-                                         padding: EdgeInsets.all(5),
-                                         child: Column(
+                                         padding: EdgeInsets.symmetric(horizontal: 5),
+                                         height: 65,
+                                         child: ListView(
                                            children: [
                                              Row(
                                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -217,7 +218,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                                      child: Text('Details', style: TextStyle(color: Colors.white,fontSize: 15,fontWeight: FontWeight.w500)),
                                                    ),
                                                  ),
-                                                 if(cars[x]?.order?.payment == OrderPayment.pending)
+
+
+                                                 /*if(cars[x]?.order?.payment == OrderPayment.pending)
                                                    ApplePayButton(
                                                      paymentConfiguration: PaymentConfiguration.fromJsonString(defaultApplePay),
                                                      paymentItems: [
@@ -234,6 +237,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                        child: CircularProgressIndicator(),
                                                      ),
                                                    ),
+                                                   */
                                                    /*ElevatedButton(
                                                      onPressed: ()async {
                                                        Navigator.push(context, MaterialPageRoute(builder: (context) => PaymentPage(car: cars[x],))).then((value) => _pullMyCars());
@@ -266,7 +270,8 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                 ],
               ),
-            ) : ListView(
+            )
+            : ListView(
                   children: [
                     Container(
                       padding: EdgeInsets.all(10),

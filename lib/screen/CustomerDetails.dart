@@ -39,13 +39,18 @@ class _CustomerDetailState extends State<CustomerDetail> {
 
   List<Car?> cars=[];
   List<bool> showCarsBool=[];
+  String? authRole;
+  List<String> orderTypeList=['Transfer','Mada','Cash','Online Payment'];
 
+  String selectedOrderType='';
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
       Provider.of<IndexViewModel>(context, listen: false).setCars([]);
       await _pullCars();
       await _pullTechList();
+      authRole=await ShPref.getAuthRole();
+
       selectedTech=widget.customer.group_id;
     });
     super.initState();
@@ -104,6 +109,7 @@ class _CustomerDetailState extends State<CustomerDetail> {
                         'Phone: ${widget.customer.phone}',
                         style: TextStyle(fontSize: 16.0),
                       ),
+                      if(authRole!=Role.customer)
                       InkWell(
                         onTap: () {
                           _showTechniciansBottomSheet(context,_indexViewModel.getTechniciansList,_indexViewModel);
@@ -122,7 +128,8 @@ class _CustomerDetailState extends State<CustomerDetail> {
                     ],
                   ),
                 ),
-                Container(
+                if(authRole!=Role.customer && authRole!=null)
+                  Container(
                   margin: EdgeInsets.only(right: 16.0),
                   child: ElevatedButton(
                     onPressed: () {
@@ -324,6 +331,21 @@ class _CustomerDetailState extends State<CustomerDetail> {
                                     Row(
                                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                       children: [
+                                        if(cars[i]?.order?.payment == OrderPayment.pending)
+                                        InkWell(
+                                          onTap: () {
+                                            _updateOrderTypeBottomSheet(context,orderTypeList,cars[i]?.order?.id,_indexViewModel);
+                                          },
+                                          child: Container(
+                                            width: Const.wi(context)/2.5,
+                                            padding: EdgeInsets.symmetric(vertical: 10,horizontal: 10),
+                                            decoration: BoxDecoration(
+                                                border: Border.all(color: Colors.grey),
+                                                borderRadius: BorderRadius.circular(5)
+                                            ),
+                                            child: Text(cars[i]?.order?.type!=null ? '${cars[i]?.order?.type}' : 'Select Type of Payment',style: TextStyle(color: Colors.black87),),
+                                          ),
+                                        ),
                                         ElevatedButton(
                                           onPressed: () {
                                           },
@@ -332,8 +354,8 @@ class _CustomerDetailState extends State<CustomerDetail> {
                                           ),
                                           child:
                                           cars[i]?.order?.payment == OrderPayment.pending
-                                              ? Text('Payment Pending')
-                                              : Text('Payment Done'),
+                                              ? Text('Payment Pending',style: TextStyle(color: Colors.white))
+                                              : Text('Payment Done',style: TextStyle(color: Colors.white)),
                                         ),
                                         cars[i]?.order?.subscription?.is_recurring == SubscriptionType.recurring
                                             ?
@@ -345,7 +367,7 @@ class _CustomerDetailState extends State<CustomerDetail> {
                                           style: ElevatedButton.styleFrom(
                                             primary: Colors.red, // Background color
                                           ),
-                                          child: Text('Cancel Subscription'),
+                                          child: Text('Cancel Subscription',style: TextStyle(color: Colors.white),),
                                         ):Container(),
                                       ],
                                     ),
@@ -446,5 +468,79 @@ class _CustomerDetailState extends State<CustomerDetail> {
 
     });
   }
+  void _updateOrderTypeBottomSheet(BuildContext context,List<String> orderTypeList,int? id,IndexViewModel _indexViewModel) {
+    showModalBottomSheet(
+      context: context,
+      builder: (BuildContext context) {
+        return StatefulBuilder(
+          builder: (BuildContext context, StateSetter setState) {
+            return Container(
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: ListView(
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text('Assign Order Type',style: TextStyle(fontSize: 20),),
+                        InkWell(
+                          onTap: () {
+                            Navigator.pop(context);
+                          },
+                          child: Icon(Icons.close),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 10,),
+
+                    for (int x = 0; x < orderTypeList.length; x++)
+                      InkWell(
+                        onTap: () async{
+                          setState((){
+                            selectedOrderType = orderTypeList[x];
+                          });
+                          Map<String, dynamic> data = {
+                            'id':id.toString(),
+                            'type': selectedOrderType.toString(),
+                          };
+                          try{
+                            Map response=await _indexViewModel.updateOrderType(data);
+                            print(response);
+                          }catch(e){
+                          }
+                          Navigator.pop(context);
+                        },
+                        child: Container(
+                          width: double.infinity,
+                          padding: EdgeInsets.all(10),
+                          color: selectedOrderType == orderTypeList[x]
+                              ? Colors.black
+                              : Colors.grey.shade200,
+                          margin: EdgeInsets.only(top: 2, bottom: 2),
+                          child: Text(
+                            '${orderTypeList[x]}',
+                            style: TextStyle(
+                              color:Colors.orange,
+                            ),
+                          ),
+                        ),
+                      ),
+                    SizedBox(height: 16),
+                  ],
+                ),
+              ),
+            );
+          },
+        );
+      },
+    ).then((value)async {
+      await _indexViewModel.fetchCars({'id': widget.customer.id.toString(),'car_id':widget.carId.toString()});
+      setState(() {
+        selectedOrderType=selectedOrderType;
+      });
+
+    });
+  }
+
 
 }

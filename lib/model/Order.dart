@@ -12,6 +12,7 @@ class Order {
   final String? payment;
   final String? payment_date;
   final String? receipt;
+  final String? type;
   final int? status;
   final String? renew_on;
   final List<Task>? tasks;
@@ -32,6 +33,7 @@ class Order {
      this.renew_on,
      this.status,
      this.subscription,
+     this.type,
      this.car,
      this.user,
   });
@@ -47,6 +49,7 @@ class Order {
       payment_date : json['payment_date'] as String?,
       receipt : json['receipt'] as String?,
       renew_on : json['renew_on'] as String?,
+      type : json['type'] as String?,
       status : json['status'] as int?,
       tasks : json['tasks'] as List<Task>?,
       subscription : json['subscription'] as Subscription?,
