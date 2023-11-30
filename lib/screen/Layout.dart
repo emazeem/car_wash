@@ -87,8 +87,9 @@ class _CWLayoutState extends State<CWLayout> {
 
     return Scaffold(
       appBar: AppBar(
+        iconTheme: IconThemeData(color: Colors.white),
         backgroundColor: Const.primaryColor,
-        title: Text('Car Wash App'),
+        title: Text('Car Wash App',style: TextStyle(color: Colors.white),),
       ),
       body: _pages[_selectedIndex],
       drawer: Drawer(

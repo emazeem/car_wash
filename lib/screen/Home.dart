@@ -13,6 +13,7 @@ import 'package:carwash/screen/Payment.dart';
 import 'package:carwash/screen/ShowLocation.dart';
 import 'package:carwash/screen/TaskDetails.dart';
 import 'package:carwash/viewmodel/IndexViewModel.dart';
+import 'package:checkout_sdk_flutter/checkout_sdk_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localization/flutter_localization.dart';
 import 'package:intl/intl.dart';
@@ -33,6 +34,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   String? authRole;
   int? selectedDate=0;
+  var cko = new Checkout(publicKey: Const.CHECKOUT_PUBLIC_KEY);
 
   Future<void> _pullTasks() async {
     Provider.of<IndexViewModel>(context, listen: false).setTasksList([]);
@@ -59,7 +61,8 @@ class _HomeScreenState extends State<HomeScreen> {
     return DateFormat(desiredFormat).format(dateTime);
   }
   void onApplePayResult(paymentResult) {
-    print('paymentResult ${paymentResult}');
+    var token=cko.tokenizeApplePay(paymentResult);
+    print(token);
   }
 
 

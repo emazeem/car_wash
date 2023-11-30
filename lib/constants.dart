@@ -128,8 +128,9 @@ class Const{
 
   static appbar(String title){
     return AppBar(
+      iconTheme: IconThemeData(color: Colors.white),
       backgroundColor: Const.primaryColor,
-      title: Text(title),
+      title: Text(title,style: TextStyle(color: Colors.white),),
     );
   }
   static toastMessage(String message) {

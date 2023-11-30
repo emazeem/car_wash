@@ -128,11 +128,15 @@ class _MyAppState extends State<MyApp> {
         debugShowCheckedModeBanner: false,
         title: 'Car Wash',
         theme: ThemeData(
-          appBarTheme: AppBarTheme(),
+
+          appBarTheme: AppBarTheme(
+            color: Colors.white
+          ),
           inputDecorationTheme: InputDecorationTheme(
             suffixIconColor: Colors.black54,
             prefixIconColor: Colors.black54,
             iconColor: Colors.grey,
+
             border: OutlineInputBorder(
               borderSide: BorderSide(color: Colors.blue),
             ),

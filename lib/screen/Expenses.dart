@@ -103,7 +103,7 @@ class _ExpensePageState extends State<ExpensePage> {
         onPressed: () {
           Navigator.push(context, MaterialPageRoute(builder: (context) => CreateExpensePage())).then((value) => _pullExpenses());
         },
-        child: Icon(Icons.add),
+        child: Icon(Icons.add,color: Colors.white,),
       ): Container(),
     );
   }

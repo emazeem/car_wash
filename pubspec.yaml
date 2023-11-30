@@ -28,7 +28,7 @@ dependencies:
   flutter_google_places: ^0.3.0
   geocoding: ^2.0.5
   location: ^4.4.0
-  cached_network_image:
+  cached_network_image: 3.3.0
   photo_view: ^0.14.0
   onesignal_flutter: ^3.5.0
   table_calendar: ^3.0.9

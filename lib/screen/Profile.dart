@@ -109,7 +109,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 ),
                 SizedBox(height: 20),
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     /*ElevatedButton(
                       style: ElevatedButton.styleFrom(
@@ -120,11 +120,8 @@ class _ProfilePageState extends State<ProfilePage> {
                       },
                       child: Text('My Google Location'),
                     ),*/
-                    ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        primary: Const.primaryColor, // Set the background color to black
-                      ),
-                      onPressed: ()async {
+                    InkWell(
+                      onTap: ()async {
                         if (nameController.text.isEmpty) {
                           Const.toastMessage('Name is required.');
                         } else if (phoneController.text.isEmpty) {
@@ -148,7 +145,15 @@ class _ProfilePageState extends State<ProfilePage> {
                           }
                         }
                       },
-                      child: Text(_loading ? 'Processing..' : 'Save Profile'),
+                      child: Container(
+                        padding: EdgeInsets.all(15),
+                        margin: EdgeInsets.only(bottom: 10),
+                        decoration: BoxDecoration(
+                          color: Colors.black,
+                          borderRadius: BorderRadius.circular(5),
+                        ),
+                        child: Text(_loading ? 'Processing..' : 'Save Profile',style: TextStyle(color: Colors.white),),
+                      ),
                     ),
                   ],
                 ),

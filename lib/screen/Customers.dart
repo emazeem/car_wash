@@ -132,7 +132,7 @@ class _CustomerPageState extends State<CustomerPage> {
         onPressed: () {
           Navigator.push(context, MaterialPageRoute(builder: (context) => AddCustomerPage())).then((value) => _pullRefresh());
         },
-        child: Icon(Icons.add),
+        child: Icon(Icons.add,color: Colors.white,),
       ),
     );
   }
