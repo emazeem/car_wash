@@ -2,7 +2,6 @@ import 'dart:ffi';
 
 import 'package:carwash/constants.dart';
 import 'package:carwash/model/Car.dart';
-import 'package:carwash/payment_configurations.dart';
 import 'package:carwash/viewmodel/IndexViewModel.dart';
 import 'package:flutter/material.dart';
 import 'package:checkout_sdk_flutter/checkout_sdk_flutter.dart';
@@ -200,8 +199,7 @@ class _PaymentPageState extends State<PaymentPage> {
                             }
                           },
                           style: ElevatedButton.styleFrom(
-                            primary: Const.primaryColor, // Change to your desired button color
-                            onPrimary: Colors.white,
+                            backgroundColor: Const.primaryColor, // Change to your desired button color
                             textStyle: TextStyle(color: Colors.black, fontSize: 22),
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(5),

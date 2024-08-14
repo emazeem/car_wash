@@ -52,8 +52,7 @@ class _LandingPageState extends State<LandingPage> {
                             ElevatedButton(
                               style: ElevatedButton.styleFrom(
                                   minimumSize: Size((MediaQuery.of(context).size.width / 2.3), 70),
-                                  primary:Const.primaryColor,
-                                  onPrimary: Colors.white,
+                                  backgroundColor:Const.primaryColor,
                                   textStyle: TextStyle(color: Colors.black, fontSize: 22),
                                   shape: RoundedRectangleBorder(
                                       borderRadius:
@@ -66,8 +65,7 @@ class _LandingPageState extends State<LandingPage> {
                             ElevatedButton(
                               style: ElevatedButton.styleFrom(
                                   minimumSize: Size((Const.wi(context) / 2.3), 70),
-                                  primary: Colors.white,
-                                  onPrimary: Colors.black,
+                                  backgroundColor: Colors.white,
                                   textStyle: TextStyle(color: Colors.black, fontSize: 22),
                                   shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(50),

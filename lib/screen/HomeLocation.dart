@@ -140,7 +140,7 @@ class _HomeLocationScreenState extends State<HomeLocationScreen> {
                             children: [
                               ElevatedButton(
                                 style: ElevatedButton.styleFrom(
-                                  primary: Colors.black,
+                                  backgroundColor: Colors.black,
                                 ),
                                 onPressed: () async {
                                   Map data = {

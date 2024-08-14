@@ -161,7 +161,7 @@ class _AddCustomerPageState extends State<AddCustomerPage> {
                     }
                   },
                   style: ElevatedButton.styleFrom(
-                    primary: Colors.black, // Set background color to black
+                    backgroundColor: Colors.black, // Set background color to black
                   ),
                   child: Text(
                     'Create Customer',

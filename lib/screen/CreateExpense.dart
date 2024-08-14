@@ -177,7 +177,7 @@ class _CreateExpensePageState extends State<CreateExpensePage> {
                             });
                           },
                           style: ElevatedButton.styleFrom(
-                            primary: Colors.grey, // Background color
+                            backgroundColor: Colors.grey, // Background color
                           ),
                           child: Text('Cancel', style: TextStyle(color: Colors.white)),
                         ),
@@ -193,7 +193,7 @@ class _CreateExpensePageState extends State<CreateExpensePage> {
                     children: [
                       ElevatedButton(
                         style: ElevatedButton.styleFrom(
-                          primary: Const.primaryColor, // Set the background color to black
+                          backgroundColor: Const.primaryColor, // Set the background color to black
                         ),
                         onPressed: ()async {
                           if (typeController.text.isEmpty) {
@@ -246,8 +246,6 @@ class _CreateExpensePageState extends State<CreateExpensePage> {
           "Accept": "application/json",
           'Authorization': "Bearer " + authToken
         },
-        receiveTimeout: 200000,
-        sendTimeout: 200000,
         followRedirects: false,
         validateStatus: (status) {
           return status! < 500;

@@ -165,8 +165,7 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
                                             ElevatedButton(
                                               style: ElevatedButton.styleFrom(
                                                 minimumSize: Size(100, 40),
-                                                primary: Const.primaryColor,
-                                                onPrimary: Colors.white,
+                                                backgroundColor: Const.primaryColor,
                                                 textStyle: TextStyle(color: Colors.black, fontSize: 18),
                                                 shape: RoundedRectangleBorder(
                                                   borderRadius: BorderRadius.circular(5),

@@ -8,8 +8,8 @@ import 'package:carwash/model/Task.dart';
 import 'package:carwash/model/TaskWithDate.dart';
 import 'package:carwash/model/User.dart';
 import 'package:carwash/screen/CustomerDetails.dart';
-import 'package:carwash/screen/Image.dart';
 import 'package:carwash/screen/Payment.dart';
+import 'package:carwash/screen/ShowImage.dart';
 import 'package:carwash/screen/ShowLocation.dart';
 import 'package:carwash/screen/TaskDetails.dart';
 import 'package:carwash/viewmodel/IndexViewModel.dart';
@@ -20,7 +20,6 @@ import 'package:intl/intl.dart';
 import 'package:pay/pay.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:carwash/payment_configurations.dart';
 
 
 class HomeScreen extends StatefulWidget {

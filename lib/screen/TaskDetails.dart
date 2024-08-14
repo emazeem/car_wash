@@ -5,7 +5,7 @@ import 'package:carwash/app_url.dart';
 import 'package:carwash/constants.dart';
 import 'package:carwash/model/Task.dart';
 import 'package:carwash/model/User.dart';
-import 'package:carwash/screen/Image.dart';
+import 'package:carwash/screen/ShowImage.dart';
 import 'package:carwash/screen/ShowLocation.dart';
 import 'package:carwash/viewmodel/IndexViewModel.dart';
 import 'package:dio/dio.dart';
@@ -418,7 +418,7 @@ class _TaskScreenState extends State<TaskScreen> {
                                                         });
                                                       },
                                                       style: ElevatedButton.styleFrom(
-                                                        primary: Colors.grey, // Background color
+                                                        backgroundColor: Colors.grey, // Background color
                                                       ),
                                                       child: Text('Cancel', style: TextStyle(color: Colors.white)),
                                                     ),
@@ -432,7 +432,7 @@ class _TaskScreenState extends State<TaskScreen> {
                                                         uploadFile(context,'receipt',task?.order?.id);
                                                       },
                                                       style: ElevatedButton.styleFrom(
-                                                        primary: Colors.black, // Background color
+                                                        backgroundColor: Colors.black, // Background color
                                                       ),
                                                       child: Text('Upload', style: TextStyle(color: Colors.white)),
                                                     ),
@@ -465,7 +465,7 @@ class _TaskScreenState extends State<TaskScreen> {
                                               _pullTask();
                                             },
                                             style: ElevatedButton.styleFrom(
-                                              primary: Colors.black, // Background color
+                                              backgroundColor: Colors.black, // Background color
                                             ),
                                             child: Row(
                                               mainAxisAlignment: MainAxisAlignment.center,
@@ -578,7 +578,7 @@ class _TaskScreenState extends State<TaskScreen> {
                                                         onPressed: ()async {
                                                           setState(() { imagePath=null; });
                                                         },
-                                                        style: ElevatedButton.styleFrom( primary: Colors.grey),
+                                                        style: ElevatedButton.styleFrom( backgroundColor: Colors.grey),
                                                         child: Text('Cancel', style: TextStyle(color: Colors.white)),
                                                       ),
                                                     ),
@@ -590,7 +590,7 @@ class _TaskScreenState extends State<TaskScreen> {
                                                             onPressed: ()async {
                                                               uploadFile(context,'task',task?.id);
                                                             },
-                                                            style: ElevatedButton.styleFrom(primary: Colors.black,),
+                                                            style: ElevatedButton.styleFrom(backgroundColor: Colors.black,),
                                                             child: Text('Upload', style: TextStyle(color: Colors.white)),
                                                           ),
                                                       ),
@@ -643,7 +643,7 @@ class _TaskScreenState extends State<TaskScreen> {
                                               _pullTask();
                                             },
                                             style: ElevatedButton.styleFrom(
-                                              primary: Colors.black, // Background color
+                                              backgroundColor: Colors.black, // Background color
                                             ),
                                             child: Row(
                                               mainAxisAlignment: MainAxisAlignment.center,
@@ -782,8 +782,6 @@ class _TaskScreenState extends State<TaskScreen> {
           "Accept": "application/json",
           'Authorization': "Bearer " + authToken
         },
-        receiveTimeout: 200000,
-        sendTimeout: 200000,
         followRedirects: false,
         validateStatus: (status) {
           return status! < 500;

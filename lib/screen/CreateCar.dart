@@ -205,7 +205,7 @@ class _CreateCarState extends State<CreateCar> {
                       });
                     },
                     style: ElevatedButton.styleFrom(
-                      primary: Colors.grey, // Background color
+                      backgroundColor: Colors.grey, // Background color
                     ),
                     child: Text('Cancel', style: TextStyle(color: Colors.white)),
                   ),
@@ -432,7 +432,7 @@ class _CreateCarState extends State<CreateCar> {
                     }
                   },
                   style: ElevatedButton.styleFrom(
-                    primary: Colors.black, // Set background color to black
+                    backgroundColor: Colors.black, // Set background color to black
                   ),
                   child: Text(
                     _isLoading?'Processing..':'Submit',
@@ -462,8 +462,6 @@ class _CreateCarState extends State<CreateCar> {
             "Accept": "application/json",
             'Authorization': "Bearer " + authToken
           },
-          receiveTimeout: 200000,
-          sendTimeout: 200000,
           followRedirects: false,
           validateStatus: (status) {
             return status! < 500;

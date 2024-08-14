@@ -1,19 +1,15 @@
 import 'package:carwash/constants.dart';
 import 'package:carwash/model/User.dart';
 import 'package:carwash/screen/Activites.dart';
-import 'package:carwash/screen/Calendar.dart';
 import 'package:carwash/screen/ChangePassword.dart';
 import 'package:carwash/screen/Customers.dart';
-import 'package:carwash/screen/DeleteAccount.dart';
 import 'package:carwash/screen/Expenses.dart';
 import 'package:carwash/screen/Home.dart';
 import 'package:carwash/screen/Invoice.dart';
 import 'package:carwash/screen/Login.dart';
 import 'package:carwash/screen/Payment.dart';
 import 'package:carwash/screen/Profile.dart';
-import 'package:carwash/screen/SingleTask.dart';
 import 'package:carwash/screen/Subscription.dart';
-import 'package:carwash/screen/Technicians.dart';
 import 'package:carwash/screen/Transactions.dart';
 import 'package:carwash/viewmodel/IndexViewModel.dart';
 import 'package:flutter/material.dart';
@@ -54,7 +50,7 @@ class _CWLayoutState extends State<CWLayout> {
           String url = response['url'];
           String id = response['id'].toString();
           if (url == 'task') {
-            Navigator.push(context, MaterialPageRoute(builder: (context) => SingleTaskScreen(id:id)));
+            //Navigator.push(context, MaterialPageRoute(builder: (context) => SingleTaskScreen(id:id)));
           }
         });
 
@@ -162,7 +158,7 @@ class _CWLayoutState extends State<CWLayout> {
                 leading: Icon(Icons.supervised_user_circle_rounded),
                 title: Text('Technicians'),
                 onTap: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => TechniciansPage()));
+                  //Navigator.push(context, MaterialPageRoute(builder: (context) => TechniciansPage()));
                   // Handle packages menu action
                 },
               ),
@@ -200,7 +196,7 @@ class _CWLayoutState extends State<CWLayout> {
               leading: Icon(Icons.calendar_month),
               title: Text('Calendar'),
               onTap: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) => CalendarScreen()));
+                //Navigator.push(context, MaterialPageRoute(builder: (context) => CalendarScreen()));
                 // Handle order history menu action
               },
             ),
@@ -239,7 +235,7 @@ class _CWLayoutState extends State<CWLayout> {
                 leading: Icon(Icons.delete_outline,color: Colors.white,),
                 title: Text('Delete Account',style:TextStyle(color: Colors.white),),
                 onTap: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => DeleteAccountPage(id: authUser?.id,)));
+                  //Navigator.push(context, MaterialPageRoute(builder: (context) => DeleteAccountPage(id: authUser?.id,)));
                   // Handle order history menu action
                 },
               ),

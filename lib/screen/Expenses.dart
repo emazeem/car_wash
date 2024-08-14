@@ -5,7 +5,7 @@ import 'package:carwash/model/Activity.dart';
 import 'package:carwash/model/Expense.dart';
 import 'package:carwash/model/User.dart';
 import 'package:carwash/screen/CreateExpense.dart';
-import 'package:carwash/screen/Image.dart';
+import 'package:carwash/screen/ShowImage.dart';
 import 'package:carwash/viewmodel/IndexViewModel.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';

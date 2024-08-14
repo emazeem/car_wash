@@ -5,8 +5,7 @@ import 'package:carwash/model/Car.dart';
 import 'package:carwash/model/Customer.dart';
 import 'package:carwash/model/Task.dart';
 import 'package:carwash/screen/CreateCar.dart';
-import 'package:carwash/screen/Image.dart';
-import 'package:carwash/screen/SingleTask.dart';
+import 'package:carwash/screen/ShowImage.dart';
 import 'package:carwash/viewmodel/IndexViewModel.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -136,7 +135,7 @@ class _CustomerDetailState extends State<CustomerDetail> {
                       Navigator.push(context, MaterialPageRoute(builder: (context) => CreateCar(customer: widget.customer,))).then((value) => _pullCars());
                     },
                     style: ElevatedButton.styleFrom(
-                      primary: Colors.black, // Background color
+                      backgroundColor: Colors.black, // Background color
                     ),
                     child: Text('Add Car', style: TextStyle(color: Colors.white)),
                   ),
@@ -266,7 +265,7 @@ class _CustomerDetailState extends State<CustomerDetail> {
                                                       cars[i]?.order?.tasks?[x].status == TaskStatus.pending?
                                                       InkWell(
                                                         onTap: (){
-                                                          Navigator.push(context, MaterialPageRoute(builder: (context) => SingleTaskScreen(id: cars[i]?.order?.tasks?[x].id.toString()))).then((value) => _pullCars());
+                                                          //Navigator.push(context, MaterialPageRoute(builder: (context) => SingleTaskScreen(id: cars[i]?.order?.tasks?[x].id.toString()))).then((value) => _pullCars());
 
                                                         },
                                                         child:  Icon(Icons.edit,),
@@ -350,7 +349,7 @@ class _CustomerDetailState extends State<CustomerDetail> {
                                           onPressed: () {
                                           },
                                           style: ElevatedButton.styleFrom(
-                                            primary: cars[i]?.order?.payment == OrderPayment.pending? Colors.red : Colors.green, // Background color
+                                            backgroundColor: cars[i]?.order?.payment == OrderPayment.pending? Colors.red : Colors.green, // Background color
                                           ),
                                           child:
                                           cars[i]?.order?.payment == OrderPayment.pending
@@ -365,7 +364,7 @@ class _CustomerDetailState extends State<CustomerDetail> {
                                             print(response);
                                           },
                                           style: ElevatedButton.styleFrom(
-                                            primary: Colors.red, // Background color
+                                            backgroundColor: Colors.red, // Background color
                                           ),
                                           child: Text('Cancel Subscription',style: TextStyle(color: Colors.white),),
                                         ):Container(),

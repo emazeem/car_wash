@@ -14,7 +14,7 @@ dependencies:
   flutter:
     sdk: flutter
   cupertino_icons: ^1.0.2
-  intl: ^0.18.1
+  intl:
   timeline_list: ^0.0.3
   provider: ^6.0.0
   logger: ^1.2.2
@@ -35,8 +35,9 @@ dependencies:
   change_app_package_name: ^1.0.0
   url_launcher:
   badges:
-  pay: ^1.1.2
-  flutter_localization: ^0.1.14
+  pay:
+  ##flutter_localization: ^0.1.14
+  flutter_localization:
 
   google_maps_flutter:
     git:

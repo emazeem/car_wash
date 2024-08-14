@@ -5,7 +5,6 @@ import 'package:carwash/app_url.dart';
 import 'package:carwash/constants.dart';
 import 'package:carwash/model/Activity.dart';
 import 'package:carwash/model/Expense.dart';
-import 'package:carwash/model/TaskCount.dart';
 import 'package:carwash/model/Trx.dart';
 import 'package:carwash/model/Car.dart';
 import 'package:carwash/model/Customer.dart';
@@ -491,9 +490,9 @@ class IndexViewModel extends ChangeNotifier {
 
 
   ///////////////////////////////////////////////////////
-  List<TaskCount>? _getTaskCount=[];
-  List<TaskCount>? get getTaskCount => _getTaskCount;
-  void setTaskCount(List<TaskCount> _t) {
+  List? _getTaskCount=[];
+  List? get getTaskCount => _getTaskCount;
+  void setTaskCount(List _t) {
     _getTaskCount = _t;
     notifyListeners();
   }
@@ -502,10 +501,10 @@ class IndexViewModel extends ChangeNotifier {
     try{
       _getStatus = ApiResponse.loading('Fetching task counter');
       dynamic response = await _apiServices.getPostAuthApiResponse(AppUrl.fetchTasksFromDates,{}, authToken);
-      List<TaskCount>? tasks=[];
+      List? tasks=[];
       response['data'].forEach((item){
         print(item);
-        tasks.add(TaskCount(date: item['task_date'],count: item['task_count']));
+        //tasks.add(TaskCount(date: item['task_date'],count: item['task_count']));
       });
       _getStatus = ApiResponse.completed(tasks);
       _getTaskCount=tasks;

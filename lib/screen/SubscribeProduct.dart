@@ -79,7 +79,7 @@ class SubscribeProduct extends StatelessWidget {
                     Navigator.pop(context);
                   },
                   style: ElevatedButton.styleFrom(
-                    primary: Const.primaryColor, // Set the background color
+                    backgroundColor: Const.primaryColor, // Set the background color
                     padding: EdgeInsets.symmetric(vertical: 16, horizontal: 32), // Set padding
                   ),
                   child: Text('Subscribe Product'),

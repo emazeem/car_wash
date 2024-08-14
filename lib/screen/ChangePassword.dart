@@ -132,7 +132,7 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                   }
                 },
                 style: ElevatedButton.styleFrom(
-                  primary: Const.primaryColor, // Set background color to black
+                  backgroundColor: Const.primaryColor, // Set background color to black
                 ),
                 child: Text(
                   _loading? 'Processing..':'Change Password',

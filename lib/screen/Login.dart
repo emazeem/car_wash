@@ -98,8 +98,7 @@ class _LoginPageState extends State<LoginPage> {
                   ElevatedButton(
                     style: ElevatedButton.styleFrom(
                       minimumSize: Size((MediaQuery.of(context).size.width / 3), 60),
-                      primary: Const.primaryColor,
-                      onPrimary: Colors.white,
+                      backgroundColor: Const.primaryColor,
                       textStyle: TextStyle(color: Colors.black, fontSize: 22),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(50),
